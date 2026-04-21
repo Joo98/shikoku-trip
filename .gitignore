@@ -1,0 +1,14 @@
+# Generated outputs (로컬에서만 사용)
+output/
+ref/
+transportation/
+
+# 에디터/OS
+.claude/
+.DS_Store
+*.swp
+*~
+
+# Python
+__pycache__/
+*.pyc

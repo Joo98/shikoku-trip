@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시코쿠 가족여행 준비물 체크리스트</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        :root {
+            --primary: #2d5016;
+            --primary-light: #4a7c28;
+            --accent: #e8913a;
+            --bg: #faf8f4;
+            --card-bg: #ffffff;
+            --text: #2c2c2c;
+            --text-light: #6b6b6b;
+            --border: #e8e4dc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #d35400 0%, #e67e22 50%, #f39c12 100%);
+            color: #fff;
+            padding: 45px 40px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.2em;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 6px;
+        }
+        .hero .subtitle {
+            font-size: 1em;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        .hero .back-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.9em;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 20px;
+            border-radius: 20px;
+        }
+        .hero .back-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .category {
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .category-header {
+            padding: 16px 24px;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cat-docs .category-header { background: #c0392b; }
+        .cat-money .category-header { background: #2980b9; }
+        .cat-clothes .category-header { background: #8e44ad; }
+        .cat-digital .category-header { background: #27ae60; }
+        .cat-health .category-header { background: #e67e22; }
+        .cat-etc .category-header { background: #7f8c8d; }
+        .cat-pre .category-header { background: #2c3e50; }
+
+        .category-body {
+            padding: 8px 24px 16px;
+        }
+
+        /* ── 체크리스트 (인쇄 친화적) ── */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 10px 0 10px 36px;
+            position: relative;
+            border-bottom: 1px solid #f2f0ec;
+            font-size: 0.95em;
+        }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist li::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 13px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #bbb;
+            border-radius: 3px;
+            background: #fff;
+        }
+        .checklist .item-name {
+            font-weight: 600;
+        }
+        .checklist .item-note {
+            display: block;
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        .checklist .item-important {
+            color: #c0392b;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #fff8ec;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 0.92em;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .person-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .person-box {
+            background: #f8f6f2;
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        .person-box .name {
+            font-weight: 700;
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+        .person-box .role {
+            font-size: 0.8em;
+            color: var(--text-light);
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.92em;
+        }
+        .summary-table th {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 500;
+        }
+        .summary-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .summary-table tr:nth-child(even) td {
+            background: #faf8f4;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 0.85em;
+        }
+
+        @media print {
+            body { background: #fff; font-size: 13px; }
+            .hero { padding: 20px; }
+            .category { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+            .checklist li::before {
+                border-color: #333;
+            }
+        }
+        @media (max-width: 600px) {
+            .person-grid { grid-template-columns: 1fr 1fr; }
+            .hero h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>여행 준비물 체크리스트</h1>
+    <div class="subtitle">시코쿠 3박 4일 가족여행 &middot; 2026. 4. 24 ~ 27</div>
+    <a href="시코쿠_3박4일_여행계획.html" class="back-link">&larr; 여행계획 보기</a>
+</div>
+
+<div class="container">
+
+<!-- ══════════ 여행 개요 ══════════ -->
+<div class="info-box">
+    <strong>여행 요약</strong>
+    인천 &rarr; 마쓰야마(에히메) &rarr; 렌트카로 다카마쓰(카가와) 이동 &rarr; 나오시마 &rarr; 다카마쓰 공항 귀국<br>
+    4명 / 3박 4일 / 4월 24일(금)~27일(월)
+</div>
+
+<!-- ══════════ 서류/필수 ══════════ -->
+<div class="category cat-docs">
+    <div class="category-header">서류 &amp; 필수품</div>
+    <div class="category-body">
+        <ul class="checklist">
+            <li>
+                <span class="item-name item-important">여권</span>
+                <span class="item-note">유효기간 6개월 이상 확인. 사본도 별도 보관 (사진 찍어두기)</span>
+            </li>
+            <li>
+                <span class="item-name item-important">국제운전면허증</span>
+                <span class="item-note">면허시험장 또는 경찰서에서 당일 발급 가능 (수수료 약 8,500원). 한국 면허증 원본도 반드시 함께!</span>
+            </li>
+            <li>
+                <span class="item-name item-important">한국 운전면허증 (원본)</span>
+                <span class="item-note">국제면허증만으로는 렌트 불가. 반드시 원본 지참</span>
+            </li>
+            <li>
+                <span class="item-name">항공권 e-티켓 (인쇄 또는 캡처)</span>
+                <span class="item-note">출국: 제주항공 7C1703 (13:15) / 귀국: 에어서울 RS742 (11:40)</span>
+            </li>
+            <li>
+                <span class="item-name">숙소 예약 확인서</span>
+                <span class="item-note">체크인 시 필요. 영문 주소 메모해두면 택시 이용 시 편리</span>
+            </li>
+            <li>
+                <span class="item-name">렌트카 예약 확인서</span>
+                <span class="item-note">픽업 장소, 반납 장소, 예약 번호 확인</span>
+            </li>
+            <li>
+                <span class="item-name">나오시마 미술관 예약 확인</span>
+                <span class="item-note">지추 미술관은 사전 온라인 예약 필수 (benesse-artsite.jp)</span>
+            </li>
+            <li>
+                <span class="item-name">해외여행자보험</span>
+                <span class="item-note">카드사 자동 가입 여부 확인. 별도 가입 시 출국 전 완료</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ 돈 ══════════ -->
+<div class="category cat-money">
+    <div class="category-header">환전 &amp; 결제</div>
+    <div class="category-body">
+        <ul class="checklist">
+            <li>
+                <span class="item-name item-important">엔화 현금</span>
+                <span class="item-note">시코쿠 소도시는 현금만 받는 곳이 많음! 1인당 3~5만엔 권장. 1,000엔권 &amp; 100엔 동전 넉넉히</span>
+            </li>
+            <li>
+                <span class="item-name">해외 결제 가능 신용카드 / 체크카드</span>
+                <span class="item-note">VISA, Mastercard 권장. JCB도 일본에서 잘 됨. 해외결제 한도 확인</span>
+            </li>
+            <li>
+                <span class="item-name">교통카드 (Suica / ICOCA 등)</span>
+                <span class="item-note">편의점, 자판기 등에서도 사용 가능. Apple Pay에 Suica 등록하면 편리</span>
+            </li>
+        </ul>
+
+        <div class="info-box">
+            <strong>예상 주요 비용 (1인 기준, 참고용)</strong>
+            <table class="summary-table">
+                <tr><th>항목</th><th>예상 비용</th></tr>
+                <tr><td>식사 (1끼 평균)</td><td>800 ~ 1,500엔</td></tr>
+                <tr><td>나오시마 페리 (왕복)</td><td>1,040엔 (일반) / 2,440엔 (고속)</td></tr>
+                <tr><td>지추 미술관 입장료</td><td>2,100엔</td></tr>
+                <tr><td>도고온천 본관</td><td>420엔~</td></tr>
+                <tr><td>마쓰야마성 리프트+입장</td><td>1,020엔</td></tr>
+                <tr><td>리쓰린공원</td><td>410엔</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ 의류 ══════════ -->
+<div class="category cat-clothes">
+    <div class="category-header">의류 &amp; 세면용품</div>
+    <div class="category-body">
+        <div class="info-box">
+            <strong>4월 말 시코쿠 날씨</strong>
+            평균 기온 15~22도. 낮에는 따뜻하지만 아침저녁으로 쌀쌀. 비 올 확률 있음 (장마 전이지만 봄비 주의).
+        </div>
+        <ul class="checklist">
+            <li>
+                <span class="item-name">긴팔 상의 3~4벌</span>
+                <span class="item-note">얇은 긴팔 + 반팔 조합. 겹쳐 입기 좋은 옷</span>
+            </li>
+            <li>
+                <span class="item-name">바지 / 하의 2~3벌</span>
+            </li>
+            <li>
+                <span class="item-name">얇은 겉옷 / 바람막이</span>
+                <span class="item-note">나오시마 바다 바람, 마쓰야마성 산 위, 저녁 산책 시 필요</span>
+            </li>
+            <li>
+                <span class="item-name">우산 또는 접이식 우비</span>
+                <span class="item-note">4월 말 비 가능성. 접이식 우산 1인 1개 권장</span>
+            </li>
+            <li>
+                <span class="item-name item-important">편한 운동화</span>
+                <span class="item-note">고토히라궁 785계단, 나오시마 도보, 마쓰야마성 등 걷기 많음!</span>
+            </li>
+            <li>
+                <span class="item-name">속옷 &amp; 양말 4일분</span>
+            </li>
+            <li>
+                <span class="item-name">잠옷 / 실내복</span>
+                <span class="item-note">호텔에 유카타 있을 수 있으나 개인 잠옷 선호 시 챙기기</span>
+            </li>
+            <li>
+                <span class="item-name">세면도구</span>
+                <span class="item-note">칫솔, 치약, 세안제, 면도기. 호텔 어메니티 확인 후 판단</span>
+            </li>
+            <li>
+                <span class="item-name">자외선 차단제</span>
+                <span class="item-note">4월도 자외선 강함. 나오시마 야외 활동 시 필수</span>
+            </li>
+            <li>
+                <span class="item-name">수건 (소형)</span>
+                <span class="item-note">도고온천 방문 시 작은 수건 있으면 편리 (온천에서도 구매 가능)</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ 전자기기 ══════════ -->
+<div class="category cat-digital">
+    <div class="category-header">전자기기 &amp; 통신</div>
+    <div class="category-body">
+        <ul class="checklist">
+            <li>
+                <span class="item-name item-important">휴대폰 &amp; 충전기</span>
+            </li>
+            <li>
+                <span class="item-name item-important">포켓와이파이 또는 일본 eSIM</span>
+                <span class="item-note">4명이면 포켓와이파이가 경제적. 공항 수령 또는 사전 배송. 시코쿠 산간 지역은 신호 약할 수 있음</span>
+            </li>
+            <li>
+                <span class="item-name">보조 배터리</span>
+                <span class="item-note">나오시마 당일치기 등 외출 시간 긴 날 필수. 10,000mAh 이상 권장</span>
+            </li>
+            <li>
+                <span class="item-name">카메라 (선택)</span>
+                <span class="item-note">치치부가하마 인생샷, 나오시마 예술작품 등 촬영 포인트 많음</span>
+            </li>
+            <li>
+                <span class="item-name">멀티 충전 케이블 / 어댑터</span>
+                <span class="item-note">일본 콘센트는 한국과 동일 (110V, A타입). 별도 어댑터 불필요하나 전압이 110V이므로 고출력 기기 주의</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ 건강 ══════════ -->
+<div class="category cat-health">
+    <div class="category-header">건강 &amp; 상비약</div>
+    <div class="category-body">
+        <ul class="checklist">
+            <li>
+                <span class="item-name">개인 상비약</span>
+                <span class="item-note">두통약, 소화제, 지사제, 알레르기약, 멀미약(렌트카 이동 대비)</span>
+            </li>
+            <li>
+                <span class="item-name">밴드 / 반창고</span>
+                <span class="item-note">계단 많은 일정, 새 신발이면 필수</span>
+            </li>
+            <li>
+                <span class="item-name">마스크</span>
+                <span class="item-note">일본은 실내 마스크 착용 문화 여전. 기내 착용용도</span>
+            </li>
+            <li>
+                <span class="item-name">손 소독제 / 물티슈</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ 기타 ══════════ -->
+<div class="category cat-etc">
+    <div class="category-header">기타 &amp; 편의</div>
+    <div class="category-body">
+        <ul class="checklist">
+            <li>
+                <span class="item-name">여행용 캐리어</span>
+                <span class="item-note">제주항공 위탁수하물 15kg 확인! 초과 시 추가 요금 발생</span>
+            </li>
+            <li>
+                <span class="item-name">에코백 / 접이식 가방</span>
+                <span class="item-note">일본은 비닐봉투 유료. 쇼핑 시 에코백 필수</span>
+            </li>
+            <li>
+                <span class="item-name">필기구 (볼펜)</span>
+                <span class="item-note">입국 신고서 기내 작성용</span>
+            </li>
+            <li>
+                <span class="item-name">지퍼백 (대형)</span>
+                <span class="item-note">온천 후 젖은 수건, 더러운 옷 분리용</span>
+            </li>
+            <li>
+                <span class="item-name">간식 / 음료</span>
+                <span class="item-note">나오시마 섬 내 식당 적음. 간단한 간식 준비하면 좋음</span>
+            </li>
+            <li>
+                <span class="item-name">쇼핑 리스트</span>
+                <span class="item-note">사올 것 미리 정리해두면 시간 절약. 면세 한도 $800 (2026년 기준 확인 필요)</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ 출국 전 할 일 ══════════ -->
+<div class="category cat-pre">
+    <div class="category-header">출국 전 반드시 할 일</div>
+    <div class="category-body">
+        <ul class="checklist">
+            <li>
+                <span class="item-name item-important">국제운전면허증 발급</span>
+                <span class="item-note">면허시험장 또는 경찰서 방문. 여권 + 운전면허증 + 여권사진 1매 필요</span>
+            </li>
+            <li>
+                <span class="item-name item-important">렌트카 예약</span>
+                <span class="item-note">토요타 렌트카 마쓰야마점 &rarr; 다카마쓰 공항점 편도 반납 예약</span>
+            </li>
+            <li>
+                <span class="item-name item-important">나오시마 지추 미술관 예약</span>
+                <span class="item-note">온라인 사전 예약 필수. benesse-artsite.jp</span>
+            </li>
+            <li>
+                <span class="item-name">엔화 환전</span>
+                <span class="item-note">은행 또는 환전소. 소액권(1,000엔)과 동전 많이 준비</span>
+            </li>
+            <li>
+                <span class="item-name">포켓와이파이 / eSIM 예약</span>
+                <span class="item-note">인천공항 수령 또는 사전 택배 수령</span>
+            </li>
+            <li>
+                <span class="item-name">Visit Japan Web 등록</span>
+                <span class="item-note">입국심사 + 세관신고 온라인 사전 등록. vjw.digital.go.jp</span>
+            </li>
+            <li>
+                <span class="item-name">항공사 사전 좌석 지정 &amp; 수하물 확인</span>
+                <span class="item-note">제주항공: 위탁수하물 15kg 포함 여부 확인</span>
+            </li>
+            <li>
+                <span class="item-name">숙소 확정</span>
+                <span class="item-note">형에게 확인!</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ 유용한 일본어 ══════════ -->
+<div class="category" style="border-top: 4px solid var(--primary);">
+    <div class="category-header" style="background: var(--primary);">알아두면 유용한 일본어</div>
+    <div class="category-body">
+        <table class="summary-table">
+            <tr><th>상황</th><th>일본어</th><th>읽는 법</th></tr>
+            <tr><td>감사합니다</td><td>ありがとうございます</td><td>아리가토 고자이마스</td></tr>
+            <tr><td>실례합니다 / 저기요</td><td>すみません</td><td>스미마센</td></tr>
+            <tr><td>이것 주세요</td><td>これをください</td><td>코레오 쿠다사이</td></tr>
+            <tr><td>얼마입니까?</td><td>いくらですか</td><td>이쿠라데스카</td></tr>
+            <tr><td>화장실 어디예요?</td><td>トイレはどこですか</td><td>토이레와 도코데스카</td></tr>
+            <tr><td>맛있습니다</td><td>おいしいです</td><td>오이시이데스</td></tr>
+            <tr><td>만석(레귤러) 주유</td><td>レギュラー満タンで</td><td>레규라 만탄데</td></tr>
+            <tr><td>계산해 주세요</td><td>お会計お願いします</td><td>오카이케이 오네가이시마스</td></tr>
+            <tr><td>~까지 가주세요</td><td>〜までお願いします</td><td>~마데 오네가이시마스</td></tr>
+        </table>
+    </div>
+</div>
+
+<div class="footer">
+    이 체크리스트를 인쇄하면 체크박스에 직접 체크하며 준비할 수 있습니다.<br>
+    Last updated: 2026-04-12
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시코쿠 맛집 가이드 - 마쓰야마 & 다카마쓰</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        :root { --bg:#faf8f4; --card-bg:#fff; --text:#2c2c2c; --text-light:#6b6b6b; --border:#e8e4dc; --accent:#e8913a; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.8; font-size:15px; }
+
+        .hero {
+            background:linear-gradient(135deg,#b71c1c 0%,#e65100 50%,#ff8f00 100%);
+            color:#fff; padding:50px 40px; text-align:center;
+        }
+        .hero h1 { font-size:2.2em; font-weight:900; letter-spacing:-1px; margin-bottom:8px; }
+        .hero .subtitle { font-size:1em; font-weight:300; opacity:0.9; }
+        .hero .back-link {
+            display:inline-block; margin-top:16px; color:rgba(255,255,255,0.8);
+            text-decoration:none; font-size:0.9em; border:1px solid rgba(255,255,255,0.3);
+            padding:6px 20px; border-radius:20px;
+        }
+        .hero .back-link:hover { background:rgba(255,255,255,0.1); color:#fff; }
+
+        .container { max-width:900px; margin:0 auto; padding:30px 20px; }
+
+        .region-title {
+            font-size:1.4em; font-weight:900; padding:20px 0 8px;
+            border-bottom:3px solid; margin-bottom:24px;
+        }
+        .region-matsuyama { color:#c0392b; border-color:#c0392b; }
+        .region-takamatsu { color:#2980b9; border-color:#2980b9; }
+        .region-area { color:#8e44ad; border-color:#8e44ad; }
+
+        /* ── 맛집 카드 ── */
+        .restaurant {
+            background:var(--card-bg); border-radius:16px; margin-bottom:28px;
+            box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden;
+        }
+        .restaurant-header {
+            padding:18px 24px; color:#fff;
+            display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
+        }
+        .restaurant-header h3 { font-size:1.15em; font-weight:700; }
+        .restaurant-header .genre {
+            background:rgba(255,255,255,0.2); padding:3px 14px;
+            border-radius:15px; font-size:0.8em; font-weight:500;
+        }
+        .cat-taimeshi .restaurant-header { background:linear-gradient(135deg,#b71c1c,#e53935); }
+        .cat-udon .restaurant-header { background:linear-gradient(135deg,#e65100,#ff9800); }
+        .cat-dessert .restaurant-header { background:linear-gradient(135deg,#ad1457,#e91e63); }
+        .cat-chicken .restaurant-header { background:linear-gradient(135deg,#4a148c,#7b1fa2); }
+        .cat-cafe .restaurant-header { background:linear-gradient(135deg,#00695c,#26a69a); }
+        .cat-seafood .restaurant-header { background:linear-gradient(135deg,#0d47a1,#1976d2); }
+        .cat-experience .restaurant-header { background:linear-gradient(135deg,#33691e,#689f38); }
+
+        .restaurant-body { padding:20px 24px; }
+        .restaurant-body .desc {
+            font-size:0.98em; line-height:1.9; margin-bottom:14px;
+            padding-bottom:14px; border-bottom:1px solid var(--border);
+        }
+        .restaurant-body .desc b { color:#c0392b; }
+
+        .meta-grid {
+            display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;
+        }
+        .meta-item {
+            background:#f8f6f2; border-radius:8px; padding:10px 14px;
+        }
+        .meta-item .label {
+            font-size:0.72em; text-transform:uppercase; color:var(--accent);
+            font-weight:700; letter-spacing:0.5px; margin-bottom:2px;
+        }
+        .meta-item .value { font-size:0.9em; font-weight:500; }
+
+        .tip-box {
+            background:#fff8ec; border-left:4px solid var(--accent);
+            border-radius:0 10px 10px 0; padding:12px 16px;
+            margin-bottom:14px; font-size:0.9em;
+        }
+        .tip-box strong { display:block; margin-bottom:2px; }
+
+        /* ── 출처 바로 아래 ── */
+        .sources-inline {
+            background:#f5f3ef; border-radius:10px; padding:14px 18px;
+            margin-top:4px;
+        }
+        .sources-inline .src-title {
+            font-size:0.78em; font-weight:700; color:var(--accent);
+            text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;
+        }
+        .sources-inline a {
+            display:block; font-size:0.85em; color:#2e7d32;
+            text-decoration:none; padding:3px 0;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        .sources-inline a:hover { text-decoration:underline; color:#1b5e20; }
+        .sources-inline .src-site {
+            color:var(--text-light); font-size:0.8em;
+        }
+
+        .footer { text-align:center; padding:30px; color:var(--text-light); font-size:0.85em; }
+
+        @media print {
+            body { background:#fff; font-size:13px; }
+            .restaurant { box-shadow:none; border:1px solid #ddd; break-inside:avoid; }
+        }
+        @media (max-width:700px) {
+            .hero { padding:35px 20px; }
+            .hero h1 { font-size:1.5em; }
+            .meta-grid { grid-template-columns:1fr; }
+            .restaurant-header { flex-direction:column; text-align:center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>시코쿠 맛집 가이드</h1>
+    <div class="subtitle">마쓰야마(에히메) &amp; 다카마쓰(카가와) &mdash; 가족 여행 추천 맛집</div>
+    <a href="시코쿠_3박4일_여행계획.html" class="back-link">&larr; 여행계획으로 돌아가기</a>
+</div>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  마쓰야마 (에히메)                           -->
+<!-- ════════════════════════════════════════════ -->
+<div class="region-title region-matsuyama">마쓰야마 (에히메현)</div>
+
+<!-- 1. 타이메시 아키요시 -->
+<div class="restaurant cat-taimeshi">
+    <div class="restaurant-header">
+        <h3>타이메시 아키요시 (鯛めし あき吉)</h3>
+        <span class="genre">도미밥 (타이메시)</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            마쓰야마식 <b>도미 솥밥</b> 전문점. 통도미를 넣어 지은 솥밥이 정갈하고 깊은 맛. 런치 11시 오픈 10분 전부터 줄이 생길 정도로 인기. 한국어 안내 가능.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">오카이도 상점가 인근</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">도미 솥밥 정식, 도미 차즈게</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">런치 1,500~2,500엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">런치 11:00~, 디너 17:00~ / 부정기 휴무</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://ikkinam.com/entry/2%EB%B0%953%EC%9D%BC-%EC%9D%BC%EB%B3%B8%EC%97%AC%ED%96%89-%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EC%98%A4%EC%B9%B4%EC%9D%B4%EB%8F%84-%EB%8F%84%EB%AF%B8-%EC%86%A5%EB%B0%A5-%EB%A1%9C%EC%BB%AC-%EB%A7%9B%EC%A7%91-%ED%83%80%EC%9D%B4%EB%A9%94%EC%8B%9C-%EC%95%84%ED%82%A4%EC%9A%94%EC%8B%9C" target="_blank">마쓰야마 오카이도 도미 솥밥 로컬 맛집 타이메시 아키요시 <span class="src-site">— ikkinam.com</span></a>
+            <a href="https://triple.guide/restaurants/f6d240b9-0a90-407f-820f-226917aa73e8" target="_blank">타이메시 아키요시 본점 <span class="src-site">— 트리플 가이드</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 2. 카도야 -->
+<div class="restaurant cat-taimeshi">
+    <div class="restaurant-header">
+        <h3>카도야 (かどや)</h3>
+        <span class="genre">도미밥 (우와지마식)</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            <b>우와지마식 타이메시</b> 전문. 날 도미회를 밥 위에 올리고 생달걀을 푼 특제간장 소스를 비벼 먹는 스타일. 자코텐(생선 튀김)을 히바치 그릴에 구워 먹는 것도 인기 메뉴.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">오카이도 상점가 바로 앞</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">우와지마 타이메시 + 자코텐 세트</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">1,500~2,800엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">11:00~22:00</div>
+            </div>
+        </div>
+        <div class="tip-box">
+            <strong>마쓰야마식 vs 우와지마식</strong>
+            마쓰야마식은 도미를 통째로 넣어 <b>솥밥</b>을 짓는 방식 (아키요시). 우와지마식은 <b>생도미회</b>를 달걀간장에 비벼 먹는 방식 (카도야). 둘 다 에히메 향토요리!
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://www.myrealtrip.com/community/posts/61965" target="_blank">마쓰야마 현지인 추천 도미밥 맛집 <span class="src-site">— 마이리얼트립</span></a>
+            <a href="https://triple.guide/restaurants/54a5c8ef-249c-4e95-a9a0-c64bb7f45838" target="_blank">카도야 오카이도점 <span class="src-site">— 트리플 가이드</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 3. 고시키 -->
+<div class="restaurant cat-seafood">
+    <div class="restaurant-header">
+        <h3>고시키 (五志喜)</h3>
+        <span class="genre">향토요리 · 오색소면</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            400년 역사의 <b>오색소면(五色そうめん)</b>과 타이메시를 함께 즐길 수 있는 에히메 향토요리 전문점. 따뜻하고 담백한 솥밥의 깊은 맛. 점심/저녁 메뉴가 달라 디너 코스도 추천.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">오카이도 상점가 부근</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">오색소면 + 타이메시 세트</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">런치 1,200~2,000엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">11:00~22:00 / 화요일 휴무</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://www.myrealtrip.com/community/posts/48177" target="_blank">5박6일 직접 가본 마쓰야마 맛집/카페 추천 <span class="src-site">— 마이리얼트립</span></a>
+            <a href="https://triple.guide/articles/fb78699e-beda-4b45-88a0-415ef96f4ef4" target="_blank">마쓰야마 대표 맛집 <span class="src-site">— 트리플 가이드</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 4. 코토리 -->
+<div class="restaurant cat-udon">
+    <div class="restaurant-header">
+        <h3>코토리 (ことり)</h3>
+        <span class="genre">나베야키 우동</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            <b>1949년 창업</b>의 전통 노포. 마쓰야마식 나베야키우동은 알루미늄 냄비에 달콤한 국물, 푹 퍼진 부드러운 면이 특징. 한국 우동과는 전혀 다른 독특한 마쓰야마만의 맛.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">오카이도 긴텐가이 상점가 초입 골목</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">나베야키우동 (계란 토핑)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">500~700엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">10:00~14:00 (약 4시간, 매진 시 조기 마감!)</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://iliketrip.net/%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EB%A7%9B%EC%A7%91-%EC%BD%94%ED%86%A0%EB%A6%AC-%EB%85%B8%ED%8F%AC-%EB%B6%84%EC%9C%84%EA%B8%B0-%EB%AC%BC%EC%94%AC-%EB%82%98%EB%8A%94-%EA%B3%B3%EC%97%90%EC%84%9C/" target="_blank">마쓰야마 맛집 코토리, 노포 분위기 물씬 나는 곳에서 냄비우동 한 그릇 <span class="src-site">— 여행좋아요</span></a>
+            <a href="https://ikkinam.com/entry/2%EB%B0%953%EC%9D%BC-%EC%9D%BC%EB%B3%B8%EC%97%AC%ED%96%89-%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EC%98%A4%EC%B9%B4%EC%9D%B4%EB%8F%84-%EA%B8%B4%ED%85%90%EA%B0%80%EC%9D%B4-%EB%A7%9B%EC%A7%91-%EB%83%84%EB%B9%84%EC%9A%B0%EB%8F%99-%EC%BD%94%ED%86%A0%EB%A6%AC" target="_blank">마쓰야마 오카이도 긴텐가이 로컬 맛집 코토리 냄비우동 <span class="src-site">— ikkinam.com</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 5. 아사히 -->
+<div class="restaurant cat-udon">
+    <div class="restaurant-header">
+        <h3>아사히 (アサヒ)</h3>
+        <span class="genre">나베야키 우동</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            코토리와 함께 마쓰야마 나베야키우동의 <b>양대산맥</b>. 달달한 맛이 특징으로 호불호가 갈리지만, "인생우동"이라는 리뷰도 많음. 시치미를 많이 넣어 먹는 것이 팁.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">오카이도·니반초 부근 (코토리와 가까움)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">나베야키우동 + 이나리스시</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">500~700엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">10:00~14:00경 (매진 시 조기 마감)</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://alcoholmemory.co.kr/99" target="_blank">마쓰야마 나베야키우동 아사히(Asahi) 호불호가 갈리는 맛집 <span class="src-site">— 툴리우스의 술도감</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 6. 10 FACTORY -->
+<div class="restaurant cat-dessert">
+    <div class="restaurant-header">
+        <h3>10 FACTORY (10팩토리)</h3>
+        <span class="genre">감귤 디저트 · 카페</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            에히메 <b>감귤 전문 디저트 카페</b>. 품종별 감귤 주스 3종 비교 세트(약 700엔)와 귤 젤라또(약 500엔)가 대표 메뉴. 온슈밀감부터 이요칸까지 다양한 귤의 미묘한 맛 차이를 비교할 수 있음. 귤 맥주도 이곳에서만 맛볼 수 있는 특별 메뉴.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">도고온천 하이카라 거리 내</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">감귤 주스 3종 세트, 귤 젤라또</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://www.tripstore.kr/blog/%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EB%A7%9B%EC%A7%91-%ED%95%84%EC%88%98-%EC%BD%94%EC%8A%A4-%EC%B4%9D%EC%A0%95%EB%A6%AC" target="_blank">마쓰야마 맛집 여행, 실패 없는 필수 코스 총정리 <span class="src-site">— 트립스토어</span></a>
+            <a href="https://www.visitehimejapan.com/ko/discover/stories/0054/" target="_blank">마쓰야마 맛집 &amp; 쇼핑 <span class="src-site">— 에히메현 공식 관광 사이트</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 7. 봇짱당고 -->
+<div class="restaurant cat-dessert">
+    <div class="restaurant-header">
+        <h3>봇짱당고 (坊っちゃん団子)</h3>
+        <span class="genre">간식 · 디저트</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            나쓰메 소세키 소설 &lt;도련님(봇짱)&gt;에서 유래한 마쓰야마 대표 간식. <b>말차(녹색), 황두(노란색), 팥(갈색)</b> 3색 3맛 당고. 대표 판매처는 <b>츠보야(つぼや)</b> 과자점. 도고온천 하이카라 거리의 유케무리 카페에서도 당고와 차를 즐길 수 있음.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">도고온천 하이카라 거리 일대</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">1꼬치 약 100~200엔</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://hwang-ee.com/%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EB%A7%9B%EC%A7%91-%EB%A9%94%EB%89%B4%EB%B3%84%EB%A1%9C-%EA%B0%80%EC%9E%A5-%EC%9D%B8%EA%B8%B0%EC%9E%88%EB%8A%94-%EC%8B%9D%EB%8B%B9-%EC%B6%94%EC%B2%9C/" target="_blank">일본 마쓰야마 맛집: 메뉴별로 No.1 추천 <span class="src-site">— Japan Trip Guide Book</span></a>
+            <a href="https://news.nate.com/view/20230311n00269" target="_blank">마쓰야마성/도고온천에서 꼭 먹어봐야 할 별미 5 <span class="src-site">— 네이트 뉴스</span></a>
+        </div>
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!--  다카마쓰 (카가와)                           -->
+<!-- ════════════════════════════════════════════ -->
+<div class="region-title region-takamatsu" style="margin-top:40px;">다카마쓰 (카가와현)</div>
+
+<!-- 8. 우동바카이치다이 -->
+<div class="restaurant cat-udon">
+    <div class="restaurant-header">
+        <h3>우동바카이치다이 (うどんバカ一代)</h3>
+        <span class="genre">사누키 우동 · 버터 카마타마</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            갓 삶은 뜨거운 면 위에 <b>버터 한 조각, 날달걀, 특제 간장, 후추</b>를 넣어 비벼 먹는 "카마버터 우동"이 시그니처. 고급 카르보나라 파스타 같은 맛이라는 평. <b>아침 6시 오픈</b>, 피크 시간 대기 최대 90분.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">가와라마치역 도보 10분</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">카마버터우동 (釜バターうどん)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">500~700엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">06:00~18:00 (매진 시 조기 마감)</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://www.kkday.com/ko/blog/35912/asia-japan-takamatsu-food" target="_blank">직접 가본 다카마쓰 맛집 BEST 4 <span class="src-site">— KKday</span></a>
+            <a href="https://www.tripstore.kr/blog/%EB%8B%A4%EC%B9%B4%EB%A7%88%EC%93%B0-%EB%A7%9B%EC%A7%91-%EC%9A%B0%EB%8F%99-%ED%98%B8%EB%84%A4%EC%B8%A0%ED%82%A4%EB%8F%84%EB%A6%AC-%ED%88%AC%EC%96%B4" target="_blank">다카마쓰 맛집 총정리: 우동 투어부터 호네츠키도리까지 <span class="src-site">— 트립스토어</span></a>
+            <a href="https://brunch.co.kr/@kkday/404" target="_blank">우동 먹으러 일본 다카마쓰! 맛집 4곳 추천 <span class="src-site">— 브런치</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 9. 메리켄야 -->
+<div class="restaurant cat-udon">
+    <div class="restaurant-header">
+        <h3>메리켄야 (めりけんや)</h3>
+        <span class="genre">사누키 우동 · 역 앞</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            다카마쓰역 <b>도보 1분</b>. 카케우동 210엔, 니쿠우동 430엔 등 놀라운 가격. 달짝지근하게 졸인 소고기가 듬뿍 올라간 <b>니쿠우동(고기우동)</b>이 추천 메뉴. 2단계 숙성 면으로 쫄깃함이 좋음. <b>07:00 오픈</b>이라 아침 우동으로 최적.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">JR 다카마쓰역 도보 1분</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">니쿠우동 (고기우동) 430엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">210~500엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">07:00~20:00</div>
+            </div>
+        </div>
+        <div class="tip-box">
+            <strong>DAY 3 아침 우동 / DAY 4 공항 이동 전 추천!</strong>
+            역 바로 앞이라 공항버스 타기 전 가볍게 한 그릇 먹기에 최적. 회전율이 빨라 대기 부담도 적습니다.
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://tommysdiner.net/4152" target="_blank">다카마쓰역앞 사누키우동 맛집 메리켄야 <span class="src-site">— tommysdiner</span></a>
+            <a href="https://kr.trip.com/moments/detail/takamatsu-56911-125706345/" target="_blank">다카마쓰 역 근처 우동 맛집 메리켄야 <span class="src-site">— 트립닷컴</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 10. 우에하라야 -->
+<div class="restaurant cat-udon">
+    <div class="restaurant-header">
+        <h3>우에하라야 본점 (上原屋本店)</h3>
+        <span class="genre">사누키 우동 · 리쓰린공원 앞</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            <b>리쓰린공원 바로 앞</b>에 위치한 셀프 우동집. 직접 면을 데쳐 튀김을 골라 먹는 방식. 큰 사이즈도 450엔으로 매우 저렴. 사누키우동 특유의 탱글한 면발과 맑은 국물이 특징.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">리쓰린공원 바로 앞</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">가케우동 + 튀김 토핑</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">300~500엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">09:30~14:30 (면 소진 시 조기 마감)</div>
+            </div>
+        </div>
+        <div class="tip-box">
+            <strong>DAY 4 아침 리쓰린공원 산책 후 추천!</strong>
+            리쓰린공원 바로 앞이라 아침 산책 후 우동 한 그릇 먹기 좋은 위치.
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://brunch.co.kr/@kkamdangnyang/87" target="_blank">쫄탱쫄탱 다카마쓰 우동 투어 <span class="src-site">— 브런치</span></a>
+            <a href="https://m.ruliweb.com/hobby/board/300117/read/30676974" target="_blank">카가와현 다카마쓰 우동 투어 사누키우동 우에하라야 본점 <span class="src-site">— 루리웹</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 11. 잇카쿠 -->
+<div class="restaurant cat-chicken">
+    <div class="restaurant-header">
+        <h3>잇카쿠 (一鶴)</h3>
+        <span class="genre">호네츠키도리 (뼈째 닭)</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            <b>1952년 창업</b>, 70년 전통의 호네츠키도리 원조 맛집. 스파이시한 양념에 구운 닭다리를 뼈째 뜯어 먹는 카가와 명물. 히나도리(영계, 부드러움)와 오야도리(노계, 쫄깃한 식감) 두 종류 선택 가능. <b>기름에 양배추를 찍어 먹는 것</b>이 포인트!
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">다카마쓰 시내 (마루가메에도 본점)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">히나도리 + 오야도리 각 1개씩 + 맥주</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">1마리 약 1,000엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">16:00~22:00 (정리권 제도 운영)</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://www.tripstore.kr/blog/%EB%8B%A4%EC%B9%B4%EB%A7%88%EC%93%B0-%EB%A7%9B%EC%A7%91-%EC%9A%B0%EB%8F%99-%ED%98%B8%EB%84%A4%EC%B8%A0%ED%82%A4%EB%8F%84%EB%A6%AC-%ED%88%AC%EC%96%B4" target="_blank">다카마쓰 맛집 총정리: 우동 투어부터 호네츠키도리까지 <span class="src-site">— 트립스토어</span></a>
+            <a href="https://www.kkday.com/ko/blog/35912/asia-japan-takamatsu-food" target="_blank">직접 가본 다카마쓰 맛집 BEST 4 <span class="src-site">— KKday</span></a>
+            <a href="https://travelershigh.co.kr/gotravel/?bmode=view&idx=44832387" target="_blank">직접 수집한 일본 다카마쓰 맛집 리스트 <span class="src-site">— 트래블러스하이</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 12. 기타하마앨리 -->
+<div class="restaurant cat-cafe">
+    <div class="restaurant-header">
+        <h3>기타하마앨리 (北浜alley)</h3>
+        <span class="genre">감성 카페 · 복합 문화공간</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            1900년대 초 <b>해운 창고를 리모델링</b>한 복합 문화공간. 대표 카페 <b>UMIE</b>는 디자이너 출신 주인이 운영하며 바다가 보이는 레트로 분위기가 인기. 여러 카페·잡화점이 모여 있어 산책하기 좋음.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">기타하마항 근처</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천</div>
+                <div class="value">UMIE 카페 — 커피 600엔대~</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">600~1,200엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">매장마다 다름 (화요일 휴무 많음 주의)</div>
+            </div>
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://shikoku-guide.com/ko/information/umie/" target="_blank">umie 카페 <span class="src-site">— SHIKOKU GUIDE</span></a>
+            <a href="https://www.kkday.com/ko/blog/35659/asia-japan-takamatsu-travel" target="_blank">다카마쓰 여행코스 가볼만한곳 <span class="src-site">— KKday</span></a>
+            <a href="https://www.tripstore.kr/blog/takamatsu-places-retro-course" target="_blank">다카마쓰 가볼만한곳 감성 코스 추천 <span class="src-site">— 트립스토어</span></a>
+        </div>
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!--  근교 지역                                   -->
+<!-- ════════════════════════════════════════════ -->
+<div class="region-title region-area" style="margin-top:40px;">근교 지역 (고토히라 · 마루가메 · 나오시마)</div>
+
+<!-- 13. 야마고에 우동 -->
+<div class="restaurant cat-udon">
+    <div class="restaurant-header">
+        <h3>야마고에 우동 (山越うどん)</h3>
+        <span class="genre">사누키 우동 · 카마타마 원조</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            <b>1941년 창업</b>, 카마타마 우동(뜨거운 면 + 생계란 비비기) <b>발상지</b>. 과거 손님이 생계란을 가져와 먹던 것에서 메뉴가 탄생. "여기서 우동을 먹으면 다른 곳에서 우동을 못 먹게 된다"는 평. 황금연휴에는 1.5km 줄이 생길 정도.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">아야가와초 (다카마쓰에서 차로 약 30분)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">추천 메뉴</div>
+                <div class="value">카마타마우동 (釜玉うどん)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">가격대</div>
+                <div class="value">300~500엔</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">09:00~13:30 (매진 시 조기 마감)</div>
+            </div>
+        </div>
+        <div class="tip-box">
+            <strong>루트 2(서쪽 해안) 드라이브 중 들르기 좋음!</strong>
+            고토히라궁으로 가는 길목에 있어 드라이브 코스에 포함하기 좋습니다.
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://brunch.co.kr/@tripcurator/99" target="_blank">가마타마 우동의 발상지, 야마고에 우동 <span class="src-site">— 브런치</span></a>
+            <a href="https://www.kkday.com/ko/blog/35912/asia-japan-takamatsu-food" target="_blank">직접 가본 다카마쓰 맛집 BEST 4 <span class="src-site">— KKday</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 14. 나카노 우동학교 -->
+<div class="restaurant cat-experience">
+    <div class="restaurant-header">
+        <h3>나카노 우동학교 (中野うどん学校)</h3>
+        <span class="genre">우동 만들기 체험</span>
+    </div>
+    <div class="restaurant-body">
+        <p class="desc">
+            밀가루 반죽부터 제면, 삶기까지 약 1시간 체험. <b>댄스 음악에 맞춰 발로 반죽 밟는</b> 재미있는 과정 포함! 졸업 증서 수여. 직접 만든 면은 밀키트로 포장하거나 바로 삶아 먹을 수 있음. 가족 여행 시 강력 추천.
+        </p>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">위치</div>
+                <div class="value">곤피라산 참배길 입구 근처 (고토히라점)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">체험비</div>
+                <div class="value">온라인 예약 1,760엔 / 현장 1,980엔 (2인~)</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">소요 시간</div>
+                <div class="value">약 50~60분</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">영업</div>
+                <div class="value">08:30~18:00 (사전 예약 권장)</div>
+            </div>
+        </div>
+        <div class="tip-box">
+            <strong>루트 2(서쪽 해안) 고토히라궁 방문 시 함께!</strong>
+            곤피라산 참배 전후로 우동 만들기 체험을 넣으면 완벽한 코스.
+        </div>
+        <div class="sources-inline">
+            <div class="src-title">블로그 리뷰 &amp; 출처</div>
+            <a href="https://iliketrip.net/5097/" target="_blank">고토히라 나카노 우동학교 예약 방법 및 후기 <span class="src-site">— 여행좋아요</span></a>
+            <a href="https://triple.guide/attractions/eb1c90b4-bcf9-4387-b95b-a509b577e3b2" target="_blank">나카노 우동 학교 고토히라점 <span class="src-site">— 트리플 가이드</span></a>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    이 문서는 2026년 4월 기준으로 작성되었습니다. 영업시간·메뉴·가격은 변동될 수 있으니 방문 전 재확인하세요.<br>
+    Last updated: 2026-04-12
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>루트 2: 서쪽 해안 드라이브 - 곤피라산 + 우유니 + 천공의 토리이</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        :root { --primary:#2d5016; --primary-light:#4a7c28; --accent:#e8913a; --bg:#faf8f4; --card-bg:#fff; --text:#2c2c2c; --text-light:#6b6b6b; --border:#e8e4dc; --spot1:#9b59b6; --spot2:#e74c3c; --spot3:#3498db; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.8; font-size:15px; }
+        .hero { background:linear-gradient(135deg,#6c3483 0%,#8e44ad 50%,#a569bd 100%); color:#fff; padding:50px 40px; text-align:center; }
+        .hero h1 { font-size:2.2em; font-weight:900; letter-spacing:-1px; margin-bottom:4px; }
+        .hero .badge { display:inline-block; background:rgba(255,255,255,0.15); padding:4px 16px; border-radius:15px; font-size:0.85em; margin-bottom:10px; }
+        .hero .subtitle { font-size:1em; font-weight:300; opacity:0.9; }
+        .hero .back-link { display:inline-block; margin-top:16px; color:rgba(255,255,255,0.8); text-decoration:none; font-size:0.9em; border:1px solid rgba(255,255,255,0.3); padding:6px 20px; border-radius:20px; }
+        .hero .back-link:hover { background:rgba(255,255,255,0.1); color:#fff; }
+        .container { max-width:900px; margin:0 auto; padding:30px 20px; }
+        .card { background:var(--card-bg); border-radius:16px; margin-bottom:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden; }
+        .card-header { padding:20px 28px; color:#fff; display:flex; justify-content:space-between; align-items:center; }
+        .card-header h2 { font-size:1.2em; font-weight:700; }
+        .card-header .dist { font-size:0.85em; opacity:0.9; background:rgba(255,255,255,0.2); padding:4px 14px; border-radius:15px; }
+        .spot1 .card-header { background:var(--spot1); }
+        .spot2 .card-header { background:var(--spot2); }
+        .spot3 .card-header { background:var(--spot3); }
+        .card-body { padding:28px; }
+        .card-body h3 { font-size:1.05em; font-weight:600; color:var(--primary); margin:18px 0 8px; }
+        .card-body h3:first-child { margin-top:0; }
+        .card-body p { font-size:0.95em; margin-bottom:8px; }
+        .card-body .desc { font-size:1.02em; line-height:1.9; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+        .detail-item { background:#f8f6f2; border-radius:10px; padding:16px; }
+        .detail-item .label { font-size:0.78em; text-transform:uppercase; color:var(--accent); font-weight:700; letter-spacing:0.5px; margin-bottom:4px; }
+        .detail-item .value { font-size:0.95em; font-weight:500; }
+        .info-box { background:#f0f7e8; border-left:4px solid var(--primary-light); border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0; font-size:0.92em; }
+        .info-box.warn { background:#fff8ec; border-left-color:var(--accent); }
+        .info-box.blue { background:#eef5fc; border-left-color:#2980b9; }
+        .info-box strong { display:block; margin-bottom:4px; }
+        .route-flow { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; margin:20px 0; }
+        .route-node { background:#8e44ad; color:#fff; padding:10px 18px; border-radius:14px; font-weight:500; font-size:0.88em; text-align:center; }
+        .route-arrow { color:var(--accent); font-weight:700; font-size:1.2em; }
+        .route-time { font-size:0.75em; color:var(--text-light); text-align:center; }
+        .route-section { background:var(--card-bg); border-radius:16px; padding:28px; margin-bottom:28px; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:4px solid #8e44ad; }
+        .route-section h2 { font-size:1.3em; font-weight:700; color:#8e44ad; margin-bottom:16px; }
+        .src-inline { background:#f5f3ef; border-radius:10px; padding:12px 16px; margin:12px 0 4px; }
+        .src-inline .src-label { font-size:0.72em; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+        .src-inline a { display:block; font-size:0.82em; color:#2e7d32; text-decoration:none; padding:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .src-inline a:hover { text-decoration:underline; }
+        .src-inline .site { color:var(--text-light); font-size:0.78em; }
+        .sources { background:var(--card-bg); border-radius:16px; padding:28px; margin-top:40px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .sources h3 { font-size:1.1em; color:var(--primary); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+        .sources ul { list-style:none; padding:0; }
+        .sources li { padding:6px 0; font-size:0.88em; border-bottom:1px dotted #eee; }
+        .sources li:last-child { border-bottom:none; }
+        .sources a { color:var(--primary-light); text-decoration:none; }
+        .sources a:hover { text-decoration:underline; }
+        .footer { text-align:center; padding:30px; color:var(--text-light); font-size:0.85em; }
+        @media print { body{background:#fff;font-size:13px;} .card,.route-section,.sources{box-shadow:none;border:1px solid #ddd;} }
+        @media (max-width:700px) { .detail-grid{grid-template-columns:1fr;} .hero{padding:35px 20px;} .hero h1{font-size:1.5em;} .route-flow{flex-direction:column;} }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="badge">ROUTE 2 &middot; 종일 드라이브</div>
+    <h1>서쪽 해안 코스</h1>
+    <div class="subtitle">곤피라산 785계단 &middot; 일본의 우유니 &middot; 천공의 토리이</div>
+    <a href="다카마쓰_근교_드라이브.html" class="back-link">&larr; 루트 선택으로 돌아가기</a>
+</div>
+
+<div class="container">
+
+<!-- 루트 개요 -->
+<div class="route-section">
+    <h2>드라이브 루트</h2>
+    <p>다카마쓰에서 서쪽으로 달리며 시코쿠의 핵심 명소 3곳을 하루에 돌아보는 코스. 총 드라이브 약 3시간 + 관광 약 5~6시간.</p>
+    <div class="route-flow">
+        <div class="route-node">다카마쓰 출발</div>
+        <div><div class="route-arrow">&rarr;</div><div class="route-time">약 1시간</div></div>
+        <div class="route-node">고토히라궁</div>
+        <div><div class="route-arrow">&rarr;</div><div class="route-time">약 40분</div></div>
+        <div class="route-node">치치부가하마</div>
+        <div><div class="route-arrow">&rarr;</div><div class="route-time">약 20분</div></div>
+        <div class="route-node">다카야신사</div>
+        <div><div class="route-arrow">&rarr;</div><div class="route-time">약 1시간</div></div>
+        <div class="route-node">다카마쓰 복귀</div>
+    </div>
+    <div class="info-box">
+        <strong>동선 팁</strong>
+        오전에 고토히라궁(체력 소모), 오후에 치치부가하마 &amp; 다카야신사(일몰 맞추기)가 이상적. 치치부가하마의 거울 사진은 <b>썰물 + 일몰(18:40경)</b> 시간대에 촬영해야 합니다.
+    </div>
+</div>
+
+<!-- 스팟 1: 고토히라궁 -->
+<div class="card spot1">
+    <div class="card-header">
+        <h2>고토히라궁 &mdash; 곤피라산 (金刀比羅宮)</h2>
+        <span class="dist">다카마쓰에서 약 1시간</span>
+    </div>
+    <div class="card-body">
+        <p class="desc">
+            바다의 수호신 '곤피라상'을 모시는 유서 깊은 신사. 본당까지 <b>785계단</b>, 최상부 오쿠샤까지는 <b>1,368계단</b>. 계단을 오르며 만나는 상점가, 전통 건축물, 그리고 정상에서의 사누키 평야 전망이 일품.
+        </p>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">위치</div>
+                <div class="value">카가와현 나카타도군 고토히라초</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">소요 시간</div>
+                <div class="value">본당까지 왕복 약 2시간</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">입장료</div>
+                <div class="value">경내 무료 (보물관 별도)</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">주차 / 내비</div>
+                <div class="value">참배길 입구 유료 주차장<br>TEL: 0877-75-2121</div>
+            </div>
+        </div>
+        <div class="info-box">
+            <strong>계단 정복 가이드</strong>
+            입구에서 <b>대나무 지팡이 대여</b> 가능. 가족 중 체력이 걱정되는 분은 본당(785계단)까지만 올라도 충분. 중간중간 찻집과 기념품점에서 쉬어가세요.<br>
+            참배길 입구 <b>상점가</b>에서 곤피라 우동, 단고(경단), 소프트크림 등 간식 가능.
+        </div>
+        <div class="src-inline">
+            <div class="src-label">고토히라궁 출처</div>
+            <a href="https://konpirabunka.com/ko/kotohira-gu.php" target="_blank">고토히라궁 <span class="site">— 고토히라 마을 문화 관광 (공식)</span></a>
+            <a href="https://www.tripstore.kr/blog/takamatsu-rentacar-trip-2n3d" target="_blank">다카마쓰 렌터카 드라이브 코스 <span class="site">— 트립스토어</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 스팟 2: 치치부가하마 -->
+<div class="card spot2">
+    <div class="card-header">
+        <h2>치치부가하마 (父母ヶ浜)</h2>
+        <span class="dist">고토히라에서 약 40분</span>
+    </div>
+    <div class="card-body">
+        <p class="desc">
+            <b>"일본의 우유니 사막"</b>으로 불리는 인생샷 명소. 약 1km 해변에 썰물 때 물 웅덩이가 생기면 하늘이 거울처럼 비치는 환상적인 풍경. 일본 석양 100선 선정.
+        </p>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">위치</div>
+                <div class="value">카가와현 미토요시 닌쇼초</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">소요 시간</div>
+                <div class="value">약 1~2시간 (촬영 포함)</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">입장료 / 주차</div>
+                <div class="value">모두 무료</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">내비</div>
+                <div class="value">TEL: 0875-56-5880</div>
+            </div>
+        </div>
+        <div class="info-box warn">
+            <strong>인생샷 촬영 조건 3가지!</strong>
+            1. <b>썰물 시간대</b> &mdash; 간조(썰물) 전후가 최적. 사전에 조석표 확인 필수<br>
+            2. <b>바람이 없는 날</b> &mdash; 수면이 잔잔해야 거울 효과 발생<br>
+            3. <b>일몰 시간</b> &mdash; 4월 말 일몰 약 18:40~18:50경이 가장 극적<br><br>
+            카메라를 수면에 최대한 가까이 대고, 피사체는 웅덩이 바로 뒤에 서야 합니다.
+        </div>
+        <div class="src-inline">
+            <div class="src-label">치치부가하마 출처</div>
+            <a href="https://thegate12.com/kr/article/224" target="_blank">우유니 소금호수가 카가와현에! 절경사진을 찍는법 <span class="site">— THE GATE</span></a>
+            <a href="https://japantravel.navitime.com/ko/area/jp/guide/NTJnews0325-ko/" target="_blank">치치부가하마 해변 <span class="site">— NAVITIME</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 스팟 3: 다카야신사 -->
+<div class="card spot3">
+    <div class="card-header">
+        <h2>다카야신사 &mdash; 천공의 토리이 (高屋神社)</h2>
+        <span class="dist">치치부가하마에서 약 20분</span>
+    </div>
+    <div class="card-body">
+        <p class="desc">
+            해발 404m 이나즈미산 정상의 신사. 산 가장자리에 서 있는 거대한 토리이 너머로 가노지 시내와 세토 내해가 한눈에 펼쳐지는 절경. 맑은 날에는 세토대교까지 보입니다.
+        </p>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">위치</div>
+                <div class="value">카가와현 간온지시</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">소요 시간</div>
+                <div class="value">약 1~2시간 (하이킹 포함)</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">입장료</div>
+                <div class="value">무료</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">내비</div>
+                <div class="value">TEL: 0875-24-3957<br>게구(하부) 주차장 이용</div>
+            </div>
+        </div>
+        <div class="info-box blue">
+            <strong>차량 진입 주의</strong>
+            <b>평일:</b> 정상 부근까지 차량 진입 가능 (산길 좁고 급경사, 주의 운전)<br>
+            <b>주말/공휴일 09:00~17:00:</b> 정상 부근 차량 진입 금지. 셔틀버스(유료) 또는 도보 등산(약 40~60분)<br><br>
+            4/26(일)에 방문 시 아침 일찍(09:00 전) 도착하면 차로 올라갈 수 있음.
+        </div>
+        <div class="src-inline">
+            <div class="src-label">다카야신사 출처</div>
+            <a href="https://www.my-kagawa.jp/en/see-and-do/10128" target="_blank">Takayajinja Shrine <span class="site">— VISIT KAGAWA (공식)</span></a>
+            <a href="https://matcha-jp.com/en/11031" target="_blank">Takaya Shrine: Torii in the Sky <span class="site">— MATCHA</span></a>
+        </div>
+    </div>
+</div>
+
+<!-- 출처 -->
+<div class="sources">
+    <h3>참고 자료 및 출처</h3>
+    <ul>
+        <li><a href="https://konpirabunka.com/ko/kotohira-gu.php" target="_blank">고토히라궁 &mdash; 고토히라 마을 문화 관광 (공식)</a></li>
+        <li><a href="https://thegate12.com/kr/article/224" target="_blank">우유니 소금호수가 카가와현에! 절경사진을 찍는법 &mdash; THE GATE</a></li>
+        <li><a href="https://japantravel.navitime.com/ko/area/jp/guide/NTJnews0325-ko/" target="_blank">치치부가하마 해변 &mdash; NAVITIME</a></li>
+        <li><a href="https://www.my-kagawa.jp/en/see-and-do/10128" target="_blank">Takayajinja Shrine &mdash; VISIT KAGAWA (공식)</a></li>
+        <li><a href="https://matcha-jp.com/en/11031" target="_blank">Takaya Shrine: Torii in the Sky &mdash; MATCHA</a></li>
+        <li><a href="https://www.tripstore.kr/blog/takamatsu-rentacar-trip-2n3d" target="_blank">다카마쓰 렌터카 드라이브 코스 &mdash; 트립스토어</a></li>
+    </ul>
+</div>
+
+<div class="footer">Last updated: 2026-04-12</div>
+</div>
+</body>
+</html>

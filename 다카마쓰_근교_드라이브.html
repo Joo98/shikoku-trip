@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다카마쓰 근교 - 루트 선택</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        :root { --primary:#2d5016; --primary-light:#4a7c28; --accent:#e8913a; --bg:#faf8f4; --card-bg:#fff; --text:#2c2c2c; --text-light:#6b6b6b; --border:#e8e4dc; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.8; font-size:15px; }
+
+        .hero {
+            background:linear-gradient(135deg,#1a3a5c 0%,#2980b9 50%,#5dade2 100%);
+            color:#fff; padding:50px 40px; text-align:center;
+        }
+        .hero h1 { font-size:2.2em; font-weight:900; letter-spacing:-1px; margin-bottom:8px; }
+        .hero .subtitle { font-size:1em; font-weight:300; opacity:0.9; }
+        .hero .back-link {
+            display:inline-block; margin-top:16px; color:rgba(255,255,255,0.8);
+            text-decoration:none; font-size:0.9em; border:1px solid rgba(255,255,255,0.3);
+            padding:6px 20px; border-radius:20px;
+        }
+        .hero .back-link:hover { background:rgba(255,255,255,0.1); color:#fff; }
+
+        .container { max-width:900px; margin:0 auto; padding:30px 20px; }
+
+        .intro {
+            text-align:center; padding:10px 0 30px; font-size:1.02em; color:var(--text-light);
+        }
+
+        /* ── 루트 카드 ── */
+        .route-card {
+            display:block; text-decoration:none; color:var(--text);
+            background:var(--card-bg); border-radius:20px;
+            margin-bottom:24px; box-shadow:0 2px 16px rgba(0,0,0,0.07);
+            overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;
+            cursor:pointer;
+        }
+        .route-card:hover {
+            transform:translateY(-4px);
+            box-shadow:0 8px 28px rgba(0,0,0,0.12);
+        }
+        .route-banner {
+            padding:28px 32px; color:#fff;
+            display:flex; justify-content:space-between; align-items:center;
+        }
+        .route-banner h2 { font-size:1.4em; font-weight:800; }
+        .route-banner .badge {
+            background:rgba(255,255,255,0.2); padding:6px 16px;
+            border-radius:20px; font-size:0.82em; font-weight:500;
+        }
+        .route-body { padding:24px 32px 28px; }
+        .route-body .tagline {
+            font-size:1.1em; font-weight:600; margin-bottom:8px;
+        }
+        .route-body .spots {
+            color:var(--text-light); font-size:0.95em; margin-bottom:14px;
+        }
+        .route-body .meta {
+            display:flex; gap:24px; flex-wrap:wrap; font-size:0.88em; color:var(--text-light);
+        }
+        .route-body .meta span { display:flex; align-items:center; gap:4px; }
+        .route-body .meta b { color:var(--text); }
+        .route-cta {
+            display:inline-block; margin-top:16px; padding:10px 28px;
+            border-radius:25px; font-weight:600; font-size:0.92em;
+            color:#fff; text-decoration:none;
+        }
+
+        .r1 .route-banner { background:linear-gradient(135deg,#1a1a2e,#0f3460); }
+        .r1 .route-cta { background:#0f3460; }
+        .r2 .route-banner { background:linear-gradient(135deg,#6c3483,#a569bd); }
+        .r2 .route-cta { background:#8e44ad; }
+        .r3 .route-banner { background:linear-gradient(135deg,#0e6655,#48c9b0); }
+        .r3 .route-cta { background:#1abc9c; }
+
+        /* ── 운전 주의사항 ── */
+        .tips {
+            background:var(--card-bg); border-radius:16px; padding:28px;
+            margin-top:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06);
+            border-top:4px solid var(--accent);
+        }
+        .tips h2 { font-size:1.2em; font-weight:700; color:var(--accent); margin-bottom:16px; }
+        .tips-grid {
+            display:grid; grid-template-columns:1fr 1fr; gap:14px;
+        }
+        .tip-item {
+            background:#f8f6f2; border-radius:10px; padding:14px;
+        }
+        .tip-item .label {
+            font-size:0.78em; text-transform:uppercase; color:var(--accent);
+            font-weight:700; letter-spacing:0.5px; margin-bottom:4px;
+        }
+        .tip-item .value { font-size:0.92em; font-weight:500; }
+
+        .info-box {
+            background:#fff8ec; border-left:4px solid var(--accent);
+            border-radius:0 12px 12px 0; padding:16px 20px;
+            margin:16px 0; font-size:0.92em;
+        }
+        .info-box strong { display:block; margin-bottom:4px; }
+
+        .footer { text-align:center; padding:30px; color:var(--text-light); font-size:0.85em; }
+
+        @media print {
+            body { background:#fff; font-size:13px; }
+            .route-card { box-shadow:none; border:1px solid #ddd; }
+            .route-card:hover { transform:none; }
+        }
+        @media (max-width:700px) {
+            .hero { padding:35px 20px; }
+            .hero h1 { font-size:1.5em; }
+            .tips-grid { grid-template-columns:1fr; }
+            .route-banner { flex-direction:column; gap:8px; text-align:center; }
+            .route-body .meta { flex-direction:column; gap:6px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>다카마쓰 근교 명소</h1>
+    <div class="subtitle">DAY 3 (4/26 일) &mdash; 아래 루트 중 하나를 선택하세요</div>
+    <a href="시코쿠_3박4일_여행계획.html" class="back-link">&larr; 메인 여행계획으로 돌아가기</a>
+</div>
+
+<div class="container">
+
+<p class="intro">렌트카와 페리를 활용해서 다카마쓰 근교의 다양한 명소를 둘러볼 수 있습니다.<br>일정과 취향에 맞는 루트를 클릭해서 상세 정보를 확인하세요.</p>
+
+<!-- ══════════ 루트 1: 나오시마 ══════════ -->
+<a href="루트1_나오시마.html" class="route-card r1">
+    <div class="route-banner">
+        <h2>ROUTE 1</h2>
+        <span class="badge">페리 당일치기 &middot; 종일</span>
+    </div>
+    <div class="route-body">
+        <div class="tagline">나오시마 &mdash; 예술의 섬</div>
+        <div class="spots">지추 미술관 &middot; 이우환 미술관 &middot; 베네세 하우스 &middot; 빨간 &amp; 노란 호박 &middot; 이에 프로젝트</div>
+        <div class="meta">
+            <span><b>이동:</b> 페리 50분</span>
+            <span><b>소요:</b> 약 7~8시간</span>
+            <span><b>비용:</b> 페리 520엔~ + 미술관 입장료</span>
+            <span style="color:#c0392b; font-weight:600;">월요일 휴관! 일요일만 가능</span>
+        </div>
+        <div class="route-cta">상세 보기 &rarr;</div>
+    </div>
+</a>
+
+<!-- ══════════ 루트 2: 서쪽 해안 ══════════ -->
+<a href="루트2_서쪽해안.html" class="route-card r2">
+    <div class="route-banner">
+        <h2>ROUTE 2</h2>
+        <span class="badge">렌트카 드라이브 &middot; 종일</span>
+    </div>
+    <div class="route-body">
+        <div class="tagline">서쪽 해안 코스 &mdash; 곤피라산 + 우유니 + 천공의 토리이</div>
+        <div class="spots">고토히라궁 785계단 &middot; 치치부가하마 (일본의 우유니) &middot; 다카야신사 (천공의 토리이)</div>
+        <div class="meta">
+            <span><b>드라이브:</b> 총 약 3시간</span>
+            <span><b>소요:</b> 약 8~9시간</span>
+            <span><b>비용:</b> 무료 (주차/입장 모두)</span>
+            <span><b>추천:</b> 일몰 맞춰 치치부가하마 도착</span>
+        </div>
+        <div class="route-cta">상세 보기 &rarr;</div>
+    </div>
+</a>
+
+<!-- ══════════ 루트 3: 동쪽 해안 ══════════ -->
+<a href="루트3_동쪽해안.html" class="route-card r3">
+    <div class="route-banner">
+        <h2>ROUTE 3</h2>
+        <span class="badge">렌트카 드라이브 &middot; 반나절</span>
+    </div>
+    <div class="route-body">
+        <div class="tagline">동쪽 해안 코스 &mdash; 야시마 스카이웨이 + 마루가메성</div>
+        <div class="spots">야시마 (무료 스카이웨이, 세토 내해 전망) &middot; 마루가메성 (일본 제일의 돌담, 현존 12천수각)</div>
+        <div class="meta">
+            <span><b>드라이브:</b> 총 약 1시간 20분</span>
+            <span><b>소요:</b> 약 3~4시간</span>
+            <span><b>비용:</b> 천수각 200엔 (나머지 무료)</span>
+            <span><b>추천:</b> 다른 루트와 조합 가능!</span>
+        </div>
+        <div class="route-cta">상세 보기 &rarr;</div>
+    </div>
+</a>
+
+<!-- ══════════ 운전 주의사항 ══════════ -->
+<div class="tips">
+    <h2>렌트카 운전 주의사항</h2>
+    <div class="tips-grid">
+        <div class="tip-item">
+            <div class="label">통행 방향</div>
+            <div class="value">일본은 좌측통행, 우핸들. 특히 교차로 좌/우회전 시 주의!</div>
+        </div>
+        <div class="tip-item">
+            <div class="label">고속도로</div>
+            <div class="value">시코쿠 고속도로는 편도 1차선 구간 많음. ETC 카드 비치 확인</div>
+        </div>
+        <div class="tip-item">
+            <div class="label">주유</div>
+            <div class="value">반납 전 만탱 필수. 셀프 주유소는 レギュラー(보통) 선택</div>
+        </div>
+        <div class="tip-item">
+            <div class="label">내비게이션</div>
+            <div class="value">전화번호 검색이 가장 정확. 목적지의 일본 전화번호 미리 메모</div>
+        </div>
+        <div class="tip-item">
+            <div class="label">속도 제한</div>
+            <div class="value">일반도로 40~60km/h, 고속도로 80~100km/h. 과속 카메라 주의</div>
+        </div>
+        <div class="tip-item">
+            <div class="label">음주운전</div>
+            <div class="value">일본은 음주운전 절대 금지 (0.0%). 동승자도 처벌 대상</div>
+        </div>
+    </div>
+    <div class="info-box" style="margin-top:16px;">
+        <strong>주요 내비 검색용 전화번호</strong>
+        다카마쓰항 (나오시마 페리): 087-851-4507<br>
+        고토히라궁: 0877-75-2121<br>
+        치치부가하마: 0875-56-5880<br>
+        다카야신사: 0875-24-3957<br>
+        야시마: 087-841-9443<br>
+        마루가메성: 0877-22-0331
+    </div>
+</div>
+
+<div class="footer">
+    이 문서는 2026년 4월 기준으로 작성되었습니다.<br>
+    Last updated: 2026-04-12
+</div>
+
+</div>
+</body>
+</html>
