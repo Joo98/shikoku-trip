@@ -371,6 +371,70 @@
             font-size: 0.85em;
         }
 
+        /* ── 탭 네비게이션 ── */
+        .tab-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #fff;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .tab-nav::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 1;
+            min-width: 90px;
+            padding: 14px 10px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.92em;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: none;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            font-family: inherit;
+        }
+        .tab-btn:hover {
+            color: var(--primary);
+            background: #faf8f4;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: #f5f9ee;
+        }
+        .tab-btn .tab-label {
+            display: block;
+            font-size: 0.7em;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .tab-btn.active .tab-label { color: var(--primary-light); }
+        .tab-btn.prep-tab.active { border-bottom-color: #e67e22; color: #c0392b; background: #fff8ec; }
+        .tab-btn.prep-tab.active .tab-label { color: #e67e22; }
+        .tab-btn.day1-tab.active { border-bottom-color: var(--day1); color: var(--day1); background: #fef1ef; }
+        .tab-btn.day2-tab.active { border-bottom-color: var(--day2); color: var(--day2); background: #eef5fc; }
+        .tab-btn.day3-tab.active { border-bottom-color: var(--day3); color: var(--day3); background: #f5eef8; }
+        .tab-btn.day4-tab.active { border-bottom-color: var(--day4); color: var(--day4); background: #eefaf2; }
+
+        .tab-section { display: none; animation: fadeIn 0.3s ease-in; }
+        .tab-section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ── 미정 뱃지 ── */
         .badge-tbd {
             display: inline-block;
@@ -411,9 +475,19 @@
     <div class="dates">2026. 4. 24(금) ~ 4. 27(월) &middot; 4명</div>
 </div>
 
+<!-- ══════════ 탭 네비게이션 ══════════ -->
+<nav class="tab-nav">
+    <button class="tab-btn prep-tab active" data-tab="prep"><span class="tab-label">START</span>🎒 여행준비</button>
+    <button class="tab-btn day1-tab" data-tab="day1"><span class="tab-label">4/24 금</span>DAY 1</button>
+    <button class="tab-btn day2-tab" data-tab="day2"><span class="tab-label">4/25 토</span>DAY 2</button>
+    <button class="tab-btn day3-tab" data-tab="day3"><span class="tab-label">4/26 일</span>DAY 3</button>
+    <button class="tab-btn day4-tab" data-tab="day4"><span class="tab-label">4/27 월</span>DAY 4</button>
+</nav>
+
 <div class="container">
 
-<!-- ══════════ 항공편 ══════════ -->
+<!-- ══════════ 항공편 (여행준비 탭) ══════════ -->
+<div class="tab-section active" data-tab="prep">
 <div class="section-title">항공편 정보</div>
 <div class="flight-section">
     <div class="flight-card">
@@ -433,8 +507,10 @@
         </div>
     </div>
 </div>
+</div>
 
 <!-- ══════════ DAY 1 ══════════ -->
+<div class="tab-section" data-tab="day1">
 <div class="day-block day1">
     <div class="day-header">
         <h2>DAY 1 &mdash; 4/24 (금)</h2>
@@ -504,7 +580,9 @@
     </div>
 </div>
 
+</div>
 <!-- ══════════ DAY 2 ══════════ -->
+<div class="tab-section" data-tab="day2">
 <div class="day-block day2">
     <div class="day-header">
         <h2>DAY 2 &mdash; 4/25 (토)</h2>
@@ -681,7 +759,9 @@
     </div>
 </div>
 
+</div>
 <!-- ══════════ DAY 3 ══════════ -->
+<div class="tab-section" data-tab="day3">
 <div class="day-block day3">
     <div class="day-header">
         <h2>DAY 3 &mdash; 4/26 (일)</h2>
@@ -817,7 +897,9 @@
     </div>
 </div>
 
+</div>
 <!-- ══════════ DAY 4 ══════════ -->
+<div class="tab-section" data-tab="day4">
 <div class="day-block day4">
     <div class="day-header">
         <h2>DAY 4 &mdash; 4/27 (월)</h2>
@@ -884,7 +966,10 @@
     </div>
 </div>
 
-<!-- ══════════ 준비물 & 팁 ══════════ -->
+</div>
+
+<!-- ══════════ 준비물 & 팁 (여행준비 탭) ══════════ -->
+<div class="tab-section" data-tab="prep">
 <div class="section-title">여행 준비 체크리스트</div>
 <div class="day-block" style="border-top: 4px solid var(--accent);">
     <div class="day-body" style="text-align:center; padding-bottom:8px;">
@@ -941,7 +1026,9 @@
     </div>
 </div>
 
-<!-- ══════════ 출처 ══════════ -->
+</div>
+
+<!-- ══════════ 출처 (항상 표시) ══════════ -->
 <div class="sources">
     <h3>참고 자료 및 출처</h3>
     <ul>
@@ -972,5 +1059,41 @@
 </div>
 
 </div>
+
+<script>
+(function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.tab-section');
+
+    function activateTab(name) {
+        const valid = ['prep', 'day1', 'day2', 'day3', 'day4'];
+        if (!valid.includes(name)) name = 'prep';
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+        sections.forEach(s => s.classList.toggle('active', s.dataset.tab === name));
+        const nav = document.querySelector('.tab-nav');
+        if (nav) {
+            const top = nav.getBoundingClientRect().top + window.scrollY;
+            if (window.scrollY > top) window.scrollTo({top: top - 4, behavior: 'smooth'});
+        }
+    }
+
+    tabs.forEach(t => {
+        t.addEventListener('click', e => {
+            e.preventDefault();
+            const name = t.dataset.tab;
+            activateTab(name);
+            history.replaceState(null, '', '#' + name);
+        });
+    });
+
+    window.addEventListener('hashchange', () => {
+        activateTab(location.hash.replace('#', ''));
+    });
+
+    const initial = location.hash.replace('#', '') || 'prep';
+    activateTab(initial);
+})();
+</script>
+
 </body>
 </html>
