@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도고온천 &amp; 마쓰야마 노면전차 가이드</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        :root { --primary:#2d5016; --primary-light:#4a7c28; --accent:#e8913a; --bg:#faf8f4; --card-bg:#fff; --text:#2c2c2c; --text-light:#6b6b6b; --border:#e8e4dc; --theme:#b8441d; --theme2:#d97a3b; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.8; font-size:15px; }
+        .hero { background:linear-gradient(135deg,#8b2f1d 0%,#b8441d 50%,#d97a3b 100%); color:#fff; padding:50px 40px; text-align:center; }
+        .hero h1 { font-size:2.2em; font-weight:900; letter-spacing:-1px; margin-bottom:4px; }
+        .hero .badge { display:inline-block; background:rgba(255,255,255,0.15); padding:4px 16px; border-radius:15px; font-size:0.85em; margin-bottom:10px; }
+        .hero .subtitle { font-size:1em; font-weight:300; opacity:0.9; }
+        .hero .back-link { display:inline-block; margin-top:16px; color:rgba(255,255,255,0.85); text-decoration:none; font-size:0.9em; border:1px solid rgba(255,255,255,0.3); padding:6px 20px; border-radius:20px; }
+        .hero .back-link:hover { background:rgba(255,255,255,0.1); color:#fff; }
+        .container { max-width:900px; margin:0 auto; padding:30px 20px; }
+        .card { background:var(--card-bg); border-radius:16px; margin-bottom:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden; }
+        .card-header { padding:18px 26px; background:var(--theme); color:#fff; }
+        .card-header h2 { font-size:1.2em; font-weight:700; }
+        .card-header .sub { font-size:0.85em; opacity:0.88; font-weight:400; }
+        .card-body { padding:26px; }
+        .card-body h3 { font-size:1.05em; font-weight:700; color:var(--theme); margin:22px 0 8px; }
+        .card-body h3:first-child { margin-top:0; }
+        .card-body p { font-size:0.95em; margin-bottom:8px; }
+        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+        .detail-item { background:#faf3ee; border-radius:10px; padding:14px 16px; border:1px solid #f0e2d6; }
+        .detail-item .label { font-size:0.76em; text-transform:uppercase; color:var(--theme); font-weight:700; letter-spacing:0.5px; margin-bottom:3px; }
+        .detail-item .value { font-size:0.95em; font-weight:500; line-height:1.5; }
+        .info-box { background:#fff8ec; border-left:4px solid var(--accent); border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0; font-size:0.92em; }
+        .info-box.tip { background:#eef5fc; border-left-color:#2980b9; }
+        .info-box.warn { background:#fff4f4; border-left-color:#c0392b; }
+        .info-box.green { background:#f0f7e8; border-left-color:var(--primary-light); }
+        .info-box strong { display:block; margin-bottom:6px; font-size:1em; }
+        .compare-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.92em; }
+        .compare-table th, .compare-table td { padding:10px 12px; border:1px solid var(--border); text-align:left; vertical-align:top; }
+        .compare-table th { background:var(--theme); color:#fff; font-weight:600; font-size:0.88em; }
+        .compare-table tr:nth-child(even) td { background:#faf3ee; }
+        .compare-table td b { color:var(--theme); }
+        .time-table { width:100%; border-collapse:collapse; margin:8px 0 14px; font-size:0.9em; }
+        .time-table th, .time-table td { padding:8px 10px; border:1px solid var(--border); text-align:center; }
+        .time-table th { background:#f5ede6; color:var(--theme); font-weight:700; }
+        .time-table .dir { text-align:left; font-weight:600; background:#fff6ee; }
+        .steps { counter-reset:step; padding-left:0; list-style:none; margin:10px 0; }
+        .steps li { position:relative; padding:12px 16px 12px 52px; margin-bottom:10px; background:#faf3ee; border-radius:10px; border:1px solid #f0e2d6; font-size:0.93em; line-height:1.55; }
+        .steps li::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; background:var(--theme); color:#fff; border-radius:50%; text-align:center; line-height:26px; font-weight:700; font-size:0.88em; }
+        .steps li b { color:var(--theme); }
+        .src-inline { background:#f5f3ef; border-radius:10px; padding:12px 16px; margin:12px 0 4px; }
+        .src-inline .src-label { font-size:0.72em; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+        .src-inline a { display:block; font-size:0.82em; color:#2e7d32; text-decoration:none; padding:2px 0; }
+        .src-inline a:hover { text-decoration:underline; }
+        .src-inline .site { color:var(--text-light); font-size:0.78em; }
+        .footer { text-align:center; padding:30px; color:var(--text-light); font-size:0.85em; }
+        @media (max-width:700px) { .detail-grid{grid-template-columns:1fr;} .hero{padding:35px 20px;} .hero h1{font-size:1.5em;} .compare-table, .time-table { font-size:0.82em; } .compare-table th, .compare-table td, .time-table th, .time-table td { padding:6px 8px; } }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="badge">🌸 DAY 2 상세 가이드</div>
+    <h1>도고온천 &amp; 마쓰야마 노면전차</h1>
+    <div class="subtitle">봇짱 열차 · 일반 트램 · 도고온천 시설 · 쿠폰 · 주변 관광</div>
+    <a href="시코쿠_3박4일_여행계획.html" class="back-link">&larr; 메인 계획으로 돌아가기</a>
+</div>
+
+<div class="container">
+
+<!-- ═════════ 핵심 요약 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>🎯 한눈에 보는 핵심 요약</h2>
+    </div>
+    <div class="card-body">
+        <div class="info-box tip">
+            <strong>💡 이동 수단 선택 원칙</strong>
+            <b>봇짱 열차</b>: "미리 표 사고, 정해진 시간에 타기" &mdash; 관광 경험이 목적일 때<br>
+            <b>일반 트램(노면전차)</b>: "뒷문으로 타고, 내릴 때 앞문에서 돈 내기" &mdash; 실용적 이동이 목적일 때<br>
+            <b>도고온천 오가는 길 자유 선택!</b> 갈 때는 봇짱 열차 시간 맞춰 타고, 돌아올 때 트램 쓰는 식으로 조합해도 OK.
+        </div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">봇짱 열차 요금</div>
+                <div class="value">성인 <b>1,300엔</b> · 어린이 650엔<br><span style="font-size:0.85em;color:var(--text-light);">토·일·공휴일만 운행</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="label">일반 트램 요금</div>
+                <div class="value">성인 <b>180엔 균일</b> · 초등생 90엔<br><span style="font-size:0.85em;color:var(--text-light);">거리 상관 無, IC카드 가능</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="label">도고온천 본관</div>
+                <div class="value">카미노유 <b>420엔~</b> · 1894년 목조건물<br><span style="font-size:0.85em;color:var(--text-light);">&lt;센과 치히로&gt; 모티브</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="label">아스카노유 (별관)</div>
+                <div class="value"><b>610엔 (한국 여권 쿠폰 무료!)</b><br><span style="font-size:0.85em;color:var(--text-light);">현대식 · 미디어 아트</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═════════ 봇짱 열차 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>🚂 봇짱 열차 (坊っちゃん列車)</h2>
+        <div class="sub">메이지 시대 증기기관차 레플리카 관광열차 · 나쓰메 소세키 소설 &lt;도련님&gt; 모티브</div>
+    </div>
+    <div class="card-body">
+        <h3>운행 시간표 (주말·공휴일 한정)</h3>
+
+        <p style="margin-top:8px;"><b>🛤️ 노선 1: 도고온천 ↔ 마쓰야마시역 (오카이도 경유)</b></p>
+        <table class="time-table">
+            <tr>
+                <th>방향</th>
+                <th>출발 시각 1</th>
+                <th>출발 시각 2</th>
+                <th>출발 시각 3</th>
+            </tr>
+            <tr>
+                <td class="dir">도고온천 출발</td>
+                <td>09:19</td>
+                <td>13:19</td>
+                <td>14:59</td>
+            </tr>
+            <tr>
+                <td class="dir">마쓰야마시역 출발</td>
+                <td>10:04</td>
+                <td>14:04</td>
+                <td>15:44</td>
+            </tr>
+        </table>
+
+        <p style="margin-top:14px;"><b>🛤️ 노선 2: 도고온천 ↔ 후루마치 (JR 마쓰야마역앞 경유)</b></p>
+        <table class="time-table">
+            <tr>
+                <th>방향</th>
+                <th>출발 시각</th>
+                <th>JR 마쓰야마역앞 통과</th>
+            </tr>
+            <tr>
+                <td class="dir">도고온천 출발</td>
+                <td>10:48</td>
+                <td>&mdash;</td>
+            </tr>
+            <tr>
+                <td class="dir">후루마치 출발</td>
+                <td>11:47</td>
+                <td>11:56</td>
+            </tr>
+        </table>
+
+        <div class="info-box warn">
+            <strong>⚠️ 4/25(토)는 운행일 &mdash; 탑승 가능!</strong>
+            <b>운행:</b> 토요일·일요일·공휴일만 (평일 운휴). 1일 4왕복.<br>
+            <b>정원:</b> 36명 &mdash; 성수기 매진 위험, <b>역 도착 즉시 매표소 직행</b>.<br>
+            <b>예약:</b> 불가 &mdash; 당일 선착순 현장 발권.
+        </div>
+
+        <h3>🚂 봇짱 열차 타는 법</h3>
+        <ol class="steps">
+            <li><b>승차권 구매</b> &mdash; 도고온천역·마쓰야마시역 매표소에서 당일 발권. <b>1,300엔/인</b>, 예약 불가. 역 도착 즉시 표부터 확보.</li>
+            <li><b>플랫폼 대기</b> &mdash; 출발 시각 10~15분 전 지정 승강장 대기. 승무원이 안내.</li>
+            <li><b>승하차</b> &mdash; 승무원 안내에 따라 지정 문으로. 관광열차라 승무원이 사진 찍어주거나 설명해주기도 함.</li>
+        </ol>
+
+        <div class="info-box tip">
+            <strong>💡 우리 일정 활용 팁</strong>
+            <b>09:20 JR 마쓰야마역 출발</b> 시 봇짱 열차 노선 1은 이미 09:19 출발함 &mdash; 노선 2의 10:48 도고 출발편을 타거나 일반 트램 선택.<br>
+            <b>또는:</b> 아침 일정 30분 당겨 <b>도고온천에서 09:19 출발편 탑승</b> 후 오카이도 구경 &rarr; 돌아와서 본관 관광 &mdash; 봇짱 체험 목적이라면 고려.
+        </div>
+    </div>
+</div>
+
+<!-- ═════════ 일반 트램 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>🚃 일반 노면전차 (이요테츠 시티라인)</h2>
+        <div class="sub">마쓰야마 시민의 주요 교통수단 · 10~15분 간격 수시 운행</div>
+    </div>
+    <div class="card-body">
+        <h3>운행 개요</h3>
+        <p>특정 시간표를 외울 필요 없음 &mdash; <b>약 10~15분 간격</b>으로 수시 운행. 대략 <b>06:00 ~ 22:00</b>.</p>
+
+        <div class="info-box green">
+            <strong>🗺️ 도고온천 가는 노선</strong>
+            <b>3번</b> &mdash; 마쓰야마시역(松山市駅) 출발<br>
+            <b>5번</b> &mdash; JR 마쓰야마역(JR松山駅) 출발<br>
+            <b>💡</b> 전차 앞에 <b>한자·영문으로 행선지 표기</b>. 구글맵에서 "道後温泉(Dogo Onsen)" 검색하면 가장 빨리 오는 트램 번호가 뜸.
+        </div>
+
+        <h3>🚃 일반 트램 타는 법</h3>
+        <ol class="steps">
+            <li><b>뒷문(乗口)으로 승차</b> &mdash; 전차 뒤쪽 문이 승차구. IC 카드 사용 시 탈 때 단말기에 <b>한 번 태그</b>.</li>
+            <li><b>정류장 안내 확인 + 하차 벨</b> &mdash; 안내방송·전광판으로 다음 정류장 표시. 내릴 정류장이 나오면 벽·기둥의 <b>하차 벨</b> 누르기.</li>
+            <li><b>앞문(降口)으로 하차 &amp; 요금 지불</b><br>
+                &middot; <b>현금</b>: 앞문 요금통에 정확한 금액 투입 (잔돈 無 &mdash; 옆 동전 교환기에서 1,000엔 지폐 교환 가능)<br>
+                &middot; <b>IC 카드</b>(Suica·ICOCA·PiTaPa 등 전국 호환): 단말기에 한 번 더 태그
+            </li>
+        </ol>
+
+        <div class="info-box tip">
+            <strong>💳 IC 카드 팁 (2025년 3월 도입)</strong>
+            이요테츠 전선(트램·봇짱 열차·버스) <b>전국 호환 IC카드</b> 사용 가능. 이미 가진 Suica·ICOCA 그대로 쓰면 잔돈 스트레스 없이 편리. 마쓰야마 현지 ICOCA 발급은 4월 18일부터.
+        </div>
+
+        <h3>🎫 ALL IYOTETSU 1일 승차권 (선택)</h3>
+        <p>하루에 트램을 4회 이상 탈 예정이면 <b>이요테츠 1일권(약 800엔)</b> 고려. 단, 우리 일정(갈 때·올 때 2회)에선 균일 요금 360엔이라 패스 불필요.</p>
+    </div>
+</div>
+
+<!-- ═════════ 봇짱 vs 트램 비교 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>⚖️ 봇짱 열차 vs 일반 트램 비교</h2>
+    </div>
+    <div class="card-body">
+        <table class="compare-table">
+            <tr>
+                <th>항목</th>
+                <th>🚂 봇짱 열차</th>
+                <th>🚃 일반 트램</th>
+            </tr>
+            <tr>
+                <td><b>요금 (성인)</b></td>
+                <td>1,300엔</td>
+                <td><b>180엔 (균일)</b></td>
+            </tr>
+            <tr>
+                <td><b>운행</b></td>
+                <td>토·일·공휴일만 · 1일 4왕복</td>
+                <td>매일 · 10~15분 간격</td>
+            </tr>
+            <tr>
+                <td><b>예약</b></td>
+                <td>불가 (당일 선착순)</td>
+                <td>불필요</td>
+            </tr>
+            <tr>
+                <td><b>정원</b></td>
+                <td>36명 &mdash; 매진 주의</td>
+                <td>넉넉</td>
+            </tr>
+            <tr>
+                <td><b>소요 (도고&harr;JR 마쓰야마역)</b></td>
+                <td>약 30분 (관광 주행)</td>
+                <td>약 25분</td>
+            </tr>
+            <tr>
+                <td><b>특징</b></td>
+                <td>증기기관차 레플리카 · 승무원 안내</td>
+                <td>실용적 · IC카드 OK</td>
+            </tr>
+            <tr>
+                <td><b>추천 상황</b></td>
+                <td>"경험"이 목적 · 시간 맞출 수 있을 때</td>
+                <td>수시 이동 · 돌아올 때 · 빠듯할 때</td>
+            </tr>
+        </table>
+
+        <div class="info-box green">
+            <strong>✨ 우리의 추천 조합</strong>
+            <b>갈 때(09:20~)</b>: 일반 트램 5번 (JR 마쓰야마역 출발) &mdash; 수시 운행이라 시간 리스크 無<br>
+            <b>돌아올 때(15:30 전후)</b>: 일반 트램으로 안전하게 &mdash; 열차 시간 놓치지 않도록<br>
+            <b>봇짱 열차는 옵션</b>: 도고온천에서 14:59 출발편에 맞춰 타면 오카이도 구경 후 돌아올 수 있으나 일정 여유가 있어야 함.
+        </div>
+    </div>
+</div>
+
+<!-- ═════════ 도고온천 시설 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>♨️ 도고온천 시설 3곳</h2>
+        <div class="sub">3,000년 역사 · 일본 3대 고탕 중 하나</div>
+    </div>
+    <div class="card-body">
+        <h3>🏯 도고온천 본관 (道後温泉本館)</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">요금 (2026 기준)</div>
+                <div class="value">카미노유(神の湯) <b>420엔</b><br>타마노유(霊の湯) 1,250엔<br>&mdash; 2층 특실 포함 시 더 상승</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">운영 시간</div>
+                <div class="value"><b>06:00 ~ 23:00</b><br>(22:30 최종 입장)</div>
+            </div>
+        </div>
+        <p><b>1894년 건립 3층 목조건물</b> &mdash; 일본 중요문화재. 미야자키 하야오 &lt;센과 치히로의 행방불명&gt; 온천 모델. 외관·내부 목조 구조 감상만으로도 가치 있음.</p>
+        <p><b>⚠️ 보존 수리 공사</b> &mdash; 2019~2024년 장기 공사 후 2024년 7월부터 전면 재개장. 현재는 전면 이용 가능(방문 전 공식 사이트 재확인 권장).</p>
+
+        <h3>🧖 아스카노유 (飛鳥乃湯泉)</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">요금</div>
+                <div class="value">1층 오유(お湯) <b>610엔</b><br><b style="color:var(--theme);">한국 여권 쿠폰 무료!</b><br>특실 1,280엔~</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">운영 시간</div>
+                <div class="value"><b>06:00 ~ 23:00</b><br>(22:00 최종 입장)</div>
+            </div>
+        </div>
+        <p><b>2017년 개관</b> &mdash; 현대식 목조건물. 넓은 대욕장, 안도 스타일 채광, 에히메 전통 공예 미디어 아트 벽면. 본관보다 여유롭고 외국인 친화적.</p>
+
+        <h3>🌿 쓰바키노유 (椿の湯)</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">요금</div>
+                <div class="value"><b>450엔</b></div>
+            </div>
+            <div class="detail-item">
+                <div class="label">운영 시간</div>
+                <div class="value"><b>06:30 ~ 23:00</b></div>
+            </div>
+        </div>
+        <p>현지인이 주로 이용하는 일상적인 대중목욕탕. 조용하고 관광객 적음. 본관·아스카노유와 같은 원천, 시설은 소박.</p>
+
+        <div class="info-box tip">
+            <strong>🎯 우리 일정 추천 선택</strong>
+            <b>아스카노유 우선</b>(한국 여권 무료 쿠폰 활용) &rarr; 본관은 <b>외관 포토 + 시간 여유 있으면 카미노유 420엔</b>으로 가볍게. 하루에 탕 두 곳 모두 가면 체력 소모 큼.
+        </div>
+    </div>
+</div>
+
+<!-- ═════════ 쿠폰 & 팁 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>🎁 한국 여권 쿠폰 &amp; 실용 팁</h2>
+    </div>
+    <div class="card-body">
+        <div class="info-box warn">
+            <strong>🎫 마쓰야마 공항 쿠폰 = 아스카노유 1회 무료</strong>
+            DAY 1 공항 도착 시 <b>인포메이션에서 한국 여권 제시</b> &mdash; "도고온천 별관 아스카노유 무료 이용 쿠폰" 수령.<br>
+            <b>4인 가족 = 4장 수령 (총 2,440엔 절약)</b>. 공항에서 꼭 챙기기!
+        </div>
+
+        <h3>⏰ 방문 타이밍</h3>
+        <ul style="margin-left:20px; margin-top:8px;">
+            <li><b>오전 10~11시</b> &mdash; 가장 한산. 사진·목욕 모두 쾌적.</li>
+            <li><b>오후 3~5시</b> &mdash; 중간 정도. 본관 외관 조명 전 시간.</li>
+            <li><b>저녁 7시 이후</b> &mdash; 본관 조명 점등 (야경 촬영 좋음) · 대신 혼잡.</li>
+        </ul>
+
+        <h3>👘 유카타 체험</h3>
+        <p>하이카라 거리에 유카타 대여점 다수. <b>1,500~3,000엔/3시간~종일</b>. 도고온천 거리를 유카타 차림으로 걷는 게 전통 체험. 부모님도 기념사진 남기기 좋음.</p>
+
+        <h3>📸 포토 스팟</h3>
+        <ul style="margin-left:20px; margin-top:8px;">
+            <li>본관 외관 정면 &mdash; 3층 목조의 상징 컷</li>
+            <li>봇짱 카라쿠리 시계 (매시 정각, 8분간 공연)</li>
+            <li>봇짱 열차 옆 기념촬영 (도고온천역 구내)</li>
+            <li>아스카노유 건물 정면 + 야경</li>
+            <li>하이카라 거리 아케이드 + 유카타</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ═════════ 주변 명소 ═════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>🗺️ 도고온천 주변 선택 관광</h2>
+        <div class="sub">시간 여유 있을 때 플러스 옵션</div>
+    </div>
+    <div class="card-body">
+        <h3>🕰️ 봇짱 카라쿠리 시계 (무료)</h3>
+        <p>도고온천역 바로 앞 광장. <b>매시 정각 08:00~22:00, 8분간 공연</b> &mdash; 시계가 열리면서 인형이 등장. 옆 <b>무료 족욕탕</b>에서 잠시 쉬기 좋음.</p>
+
+        <h3>🛍️ 하이카라 거리 (道後ハイカラ通り)</h3>
+        <p>도고온천 상점가 아케이드, <b>60여 개 가게</b>. 기념품·감귤 젤리·유즈 디저트·도예·유카타 대여. 도고온천역에서 본관까지 약 250m 골목.</p>
+
+        <h3>⛩️ 이시테지 (石手寺) &mdash; 선택</h3>
+        <p><b>시코쿠 88영장 제51번 사찰</b> &mdash; 국보 니오몬. 도고온천에서 <b>도보 15분 또는 트램 + 도보</b>. 무료. 시간 여유 있고 절에 관심 있으면.</p>
+
+        <h3>📚 언덕 위의 구름 뮤지엄 &mdash; 선택</h3>
+        <p>시바 료타로 소설 기념관. 안도 타다오 설계 현대 건축물. 도고온천에서 트램·도보로 접근. <b>입장 400엔</b>, 월요일 휴관.</p>
+
+        <div class="info-box">
+            <strong>🎯 현실적 선택</strong>
+            도고온천 중심 일정만 해도 여유롭게 3~4시간. <b>위 선택 옵션은 시간 남을 때만</b> &mdash; 무리해서 넣으면 15:30 마쓰야마역 복귀가 어려움. 이시테지는 도고온천 본관 근처(도보 15분)라 가장 현실적.
+        </div>
+    </div>
+</div>
+
+<!-- ═════════ 출처 ═════════ -->
+<div class="card">
+    <div class="card-header" style="background:#6b6b6b;">
+        <h2>📚 출처 및 참고 자료</h2>
+    </div>
+    <div class="card-body">
+        <div class="src-inline">
+            <div class="src-label">봇짱 열차 · 노면전차</div>
+            <a href="https://www.visitehimejapan.com/ko/discover/stories/0037/" target="_blank">봇짱열차 <span class="site">— Visit Ehime Japan (공식 한국어)</span></a>
+            <a href="https://www.visitehimejapan.com/ko/discover/stories/0038/" target="_blank">시내전차 / ALL IYOTETSU 패스 <span class="site">— Visit Ehime Japan</span></a>
+            <a href="https://www.visitehimejapan.com/ko/discover/stories/0039/" target="_blank">이요테쓰 시내/교외 전차 <span class="site">— Visit Ehime Japan</span></a>
+            <a href="https://www.iyotetsu.co.jp/bus/global/kr/" target="_blank">이요테츠 공식 (한국어) <span class="site">— iyotetsu.co.jp</span></a>
+            <a href="https://hanbitgaon.net/573" target="_blank">마쓰야마 이요테츠 교통카드 확대 (2025.3~) <span class="site">— 한빛가온</span></a>
+            <a href="https://namu.wiki/w/%EC%9D%B4%EC%9A%94%20%EC%B2%A0%EB%8F%84%20%EB%A7%88%EC%B8%A0%EC%95%BC%EB%A7%88%20%EC%8B%9C%EB%82%B4%EC%84%A0" target="_blank">이요 철도 마츠야마 시내선 <span class="site">— 나무위키</span></a>
+        </div>
+        <div class="src-inline">
+            <div class="src-label">도고온천</div>
+            <a href="https://dogo.jp/" target="_blank">도고온천 본관·아스카노유·쓰바키노유 공식 <span class="site">— dogo.jp</span></a>
+            <a href="https://www.tripstore.kr/blog/%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EC%98%A8%EC%B2%9C-%EC%97%AC%ED%96%89-%EB%8F%84%EA%B3%A0-%EC%98%A8%EC%B2%9C-%EC%BD%94%EC%8A%A4" target="_blank">마쓰야마 도고 온천 핵심 코스·료칸 총정리 <span class="site">— 트립스토어</span></a>
+            <a href="https://www.tourtoctoc.com/news/articleView.html?idxno=11480" target="_blank">마쓰야마 2박 3일 코스 (한국인 무료 꿀팁) <span class="site">— 여행톡톡</span></a>
+            <a href="https://travel.rakuten.com/contents/kor/ko-kr/guide/dogo-onsen-guide/" target="_blank">도고 온천 가이드: 가는 방법·볼거리 <span class="site">— 라쿠텐 트래블</span></a>
+            <a href="https://www.tripstore.kr/blog/%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EB%B4%87%EC%A7%B1-%ED%88%AC%EC%96%B4-%EC%BD%94%EC%8A%A4" target="_blank">마쓰야마 여행 필수 코스, 봇짱 열차와 온천 투어 <span class="site">— 트립스토어</span></a>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    마지막 업데이트: 2026-04-21 · 도고온천 가이드
+</div>
+
+</div>
+
+</body>
+</html>
