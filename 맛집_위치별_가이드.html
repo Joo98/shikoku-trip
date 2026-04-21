@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>위치별 · 날짜별 맛집 가이드 | 시코쿠 3박4일</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        :root {
+            --bg: #faf8f4;
+            --card-bg: #fff;
+            --text: #2c2c2c;
+            --text-light: #6b6b6b;
+            --border: #e8e4dc;
+            --day1: #c0392b;
+            --day2: #2980b9;
+            --day3: #8e44ad;
+            --day4: #27ae60;
+            --day1-bg: #fef1ef;
+            --day2-bg: #eef5fc;
+            --day3-bg: #f5eef8;
+            --day4-bg: #eefaf2;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            background: linear-gradient(135deg, #c0392b 0%, #e65100 33%, #8e44ad 66%, #27ae60 100%);
+            color: #fff;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        .hero h1 { font-size: 2.1em; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
+        .hero .subtitle { font-size: 1em; font-weight: 300; opacity: 0.95; }
+        .hero .back-link {
+            display: inline-block; margin-top: 18px; color: rgba(255,255,255,0.9);
+            text-decoration: none; font-size: 0.9em;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 20px; border-radius: 20px;
+        }
+        .hero .back-link:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+        /* ── 탭 네비게이션 (sticky) ── */
+        .tab-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: #fff;
+            border-bottom: 2px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex; overflow-x: auto;
+        }
+        .tab-btn {
+            flex: 1; min-width: 95px;
+            padding: 14px 10px;
+            background: none; border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-family: inherit; font-size: 0.9em; font-weight: 600;
+            color: var(--text-light);
+            transition: all 0.15s;
+            text-align: center;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            white-space: nowrap;
+        }
+        .tab-btn .tab-label {
+            font-size: 0.7em; font-weight: 400; opacity: 0.75;
+        }
+        .tab-btn.day1-tab.active { border-bottom-color: var(--day1); color: var(--day1); background: var(--day1-bg); }
+        .tab-btn.day2-tab.active { border-bottom-color: var(--day2); color: var(--day2); background: var(--day2-bg); }
+        .tab-btn.day3-tab.active { border-bottom-color: var(--day3); color: var(--day3); background: var(--day3-bg); }
+        .tab-btn.day4-tab.active { border-bottom-color: var(--day4); color: var(--day4); background: var(--day4-bg); }
+
+        .tab-section { display: none; animation: fadeIn 0.3s ease-in; }
+        .tab-section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px 40px; }
+
+        /* ── DAY 섹션 헤더 ── */
+        .day-banner {
+            padding: 24px 28px;
+            border-radius: 16px;
+            color: #fff;
+            margin-bottom: 22px;
+        }
+        .day-banner.d1 { background: linear-gradient(135deg, var(--day1) 0%, #e74c3c 100%); }
+        .day-banner.d2 { background: linear-gradient(135deg, var(--day2) 0%, #3498db 100%); }
+        .day-banner.d3 { background: linear-gradient(135deg, var(--day3) 0%, #9b59b6 100%); }
+        .day-banner.d4 { background: linear-gradient(135deg, var(--day4) 0%, #2ecc71 100%); }
+        .day-banner h2 {
+            font-size: 1.4em; font-weight: 900; margin-bottom: 6px;
+        }
+        .day-banner .day-sub {
+            font-size: 0.95em; opacity: 0.95; font-weight: 300;
+        }
+
+        /* ── 식사 섹션 (위치별 묶음) ── */
+        .meal-section {
+            margin-bottom: 28px;
+            border-radius: 14px;
+            background: var(--card-bg);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .meal-header {
+            padding: 16px 22px;
+            border-left: 5px solid;
+            background: #fafaf7;
+        }
+        .meal-header .meal-type {
+            font-size: 0.75em; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; opacity: 0.8;
+        }
+        .meal-header h3 {
+            font-size: 1.1em; font-weight: 800; margin-top: 3px;
+        }
+        .meal-header .meal-location {
+            font-size: 0.88em; color: var(--text-light); margin-top: 4px;
+        }
+        .meal-header .meal-location b { color: var(--text); }
+
+        .d1 .meal-header { border-left-color: var(--day1); }
+        .d1 .meal-header .meal-type { color: var(--day1); }
+        .d2 .meal-header { border-left-color: var(--day2); }
+        .d2 .meal-header .meal-type { color: var(--day2); }
+        .d3 .meal-header { border-left-color: var(--day3); }
+        .d3 .meal-header .meal-type { color: var(--day3); }
+        .d4 .meal-header { border-left-color: var(--day4); }
+        .d4 .meal-header .meal-type { color: var(--day4); }
+
+        .meal-body { padding: 18px 22px; }
+
+        /* ── 식당 카드 ── */
+        .rest-card {
+            padding: 16px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .rest-card:last-child { border-bottom: none; padding-bottom: 4px; }
+        .rest-card:first-child { padding-top: 4px; }
+
+        .rest-card .rest-title {
+            display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+            margin-bottom: 8px;
+        }
+        .rest-card .rest-title h4 {
+            font-size: 1.02em; font-weight: 700;
+        }
+        .rest-card .rest-title .tag {
+            font-size: 0.7em; padding: 2px 10px; border-radius: 10px;
+            background: #eee; color: #555; font-weight: 600;
+        }
+        .rest-card .rest-title .tag.pick {
+            background: #ffecb3; color: #e65100;
+        }
+        .rest-card .rest-title .tag.walk {
+            background: #e8f5e9; color: #2e7d32;
+        }
+
+        .rest-card .rest-desc {
+            font-size: 0.92em; color: #444; margin-bottom: 10px;
+        }
+        .rest-card .rest-desc b { color: #c0392b; }
+
+        .rest-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 14px;
+            background: #f8f6f2;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85em;
+        }
+        .rest-meta div { line-height: 1.6; }
+        .rest-meta .k {
+            color: #b8620f; font-weight: 600; margin-right: 4px;
+        }
+        .rest-links {
+            margin-top: 8px;
+            font-size: 0.82em;
+        }
+        .rest-links a {
+            display: inline-block;
+            color: #2e7d32;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .rest-links a:hover { text-decoration: underline; }
+        .rest-links .site { color: var(--text-light); font-size: 0.9em; }
+
+        /* ── 팁 박스 ── */
+        .tip {
+            background: #fff8ec;
+            border-left: 4px solid #e8913a;
+            border-radius: 0 10px 10px 0;
+            padding: 10px 14px;
+            margin: 10px 0;
+            font-size: 0.88em;
+        }
+        .tip strong { display: block; margin-bottom: 2px; color: #b8620f; }
+
+        /* ── Summary ── */
+        .summary {
+            background: #fff;
+            padding: 22px 24px;
+            margin-bottom: 28px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .summary h3 {
+            font-size: 1em; font-weight: 800; color: #b8620f;
+            margin-bottom: 10px;
+        }
+        .summary ul { padding-left: 20px; }
+        .summary li { margin-bottom: 5px; font-size: 0.92em; }
+
+        .footer {
+            text-align: center; padding: 30px 20px 20px;
+            color: var(--text-light); font-size: 0.82em;
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 36px 20px; }
+            .hero h1 { font-size: 1.6em; }
+            .container { padding: 18px 14px 30px; }
+            .rest-meta { grid-template-columns: 1fr; }
+            .day-banner { padding: 18px 20px; }
+            .day-banner h2 { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>🍽️ 위치별 · 날짜별 맛집 가이드</h1>
+    <div class="subtitle">시코쿠 3박4일 &middot; 각 DAY 동선 위치 기준 맛집 리스트</div>
+    <a href="index.html" class="back-link">← 메인으로</a>
+</div>
+
+<!-- ══════════ 탭 네비게이션 ══════════ -->
+<div class="tab-nav">
+    <button class="tab-btn day1-tab active" data-tab="day1"><span class="tab-label">4/24 금</span>DAY 1</button>
+    <button class="tab-btn day2-tab" data-tab="day2"><span class="tab-label">4/25 토</span>DAY 2</button>
+    <button class="tab-btn day3-tab" data-tab="day3"><span class="tab-label">4/26 일</span>DAY 3</button>
+    <button class="tab-btn day4-tab" data-tab="day4"><span class="tab-label">4/27 월</span>DAY 4</button>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════ -->
+<!-- ██████████  DAY 1  ██████████ -->
+<!-- ═══════════════════════════════════════ -->
+<div class="tab-section active" data-tab="day1">
+
+<div class="day-banner d1">
+    <h2>DAY 1 &middot; 4/24(금) 마쓰야마 도착 &middot; 오카이도 중심</h2>
+    <div class="day-sub">인천 → 마쓰야마 공항 12:25 도착 → 호텔(오카이도 도보 3분) → 로프웨이/마쓰야마성 → 저녁 오카이도</div>
+</div>
+
+<!-- DAY 1 점심 (공항/기내) -->
+<div class="meal-section d1">
+    <div class="meal-header">
+        <div class="meal-type">🍱 점심 (기내 · 도착 후 가볍게)</div>
+        <h3>공항 또는 호텔 체크인 전 가벼운 한 끼</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 마쓰야마 공항 또는 이동 중 간단히</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>마쓰야마 공항 푸드코트 / 편의점</h4>
+                <span class="tag">간단</span>
+            </div>
+            <p class="rest-desc">기내식을 먹고 내린 직후라 공복은 아닐 것. 공항 도착 후 1층 식음료점에서 <b>도미버거(鯛バーガー)</b>·감귤 소프트아이스크림이 유명. 본격 식사는 오카이도 체크인 후 저녁에.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 마쓰야마 공항 1F</div>
+                <div><span class="k">추천</span> 도미버거 · 미칸 주스</div>
+                <div><span class="k">가격</span> 500~900엔</div>
+                <div><span class="k">영업</span> 항공편 운항 시간</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 1 저녁 (오카이도) -->
+<div class="meal-section d1">
+    <div class="meal-header">
+        <div class="meal-type">🍽️ 저녁 &middot; 도미밥(타이메시)</div>
+        <h3>에히메 향토요리의 정수, 에히메산 도미로 만든 솥밥</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 오카이도 상점가 &middot; 숙소(도미인 마쓰야마) 도보 3~5분권</div>
+    </div>
+    <div class="meal-body">
+        <div class="tip">
+            <strong>📌 마쓰야마식 vs 우와지마식</strong>
+            마쓰야마식(아키요시)은 통도미를 넣은 <b>솥밥</b>, 우와지마식(카도야)은 <b>생도미회</b>를 달걀간장에 비벼 먹는 방식. 둘 다 향토요리!
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>타이메시 아키요시 (鯛めし あき吉)</h4>
+                <span class="tag pick">원탑 추천</span>
+                <span class="tag walk">숙소 도보 5분</span>
+            </div>
+            <p class="rest-desc">마쓰야마식 <b>도미 솥밥</b> 전문. 통도미를 넣어 지은 솥밥이 정갈하고 깊은 맛. 런치 오픈 10분 전부터 줄 생길 정도. <b>한국어 안내 가능</b>.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 오카이도 상점가 인근</div>
+                <div><span class="k">추천</span> 도미 솥밥 정식, 도미 차즈게</div>
+                <div><span class="k">가격</span> 런치 1,500~2,500엔</div>
+                <div><span class="k">영업</span> 11:00~ / 17:00~ &middot; 부정기 휴무</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://ikkinam.com/entry/2%EB%B0%953%EC%9D%BC-%EC%9D%BC%EB%B3%B8%EC%97%AC%ED%96%89-%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EC%98%A4%EC%B9%B4%EC%9D%B4%EB%8F%84-%EB%8F%84%EB%AF%B8-%EC%86%A5%EB%B0%A5-%EB%A1%9C%EC%BB%AC-%EB%A7%9B%EC%A7%91-%ED%83%80%EC%9D%B4%EB%A9%94%EC%8B%9C-%EC%95%84%ED%82%A4%EC%9A%94%EC%8B%9C" target="_blank">블로그 리뷰 <span class="site">— ikkinam</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>카도야 (かどや)</h4>
+                <span class="tag">우와지마식</span>
+                <span class="tag walk">숙소 도보 3분</span>
+            </div>
+            <p class="rest-desc"><b>우와지마식 타이메시</b> 전문. 날 도미회를 밥 위에 올리고 생달걀을 푼 특제간장 소스를 비벼 먹는 스타일. <b>자코텐</b>(생선 튀김)을 히바치 그릴에 구워 먹는 것도 인기.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 오카이도 상점가 바로 앞</div>
+                <div><span class="k">추천</span> 우와지마 타이메시 + 자코텐 세트</div>
+                <div><span class="k">가격</span> 1,500~2,800엔</div>
+                <div><span class="k">영업</span> 11:00~22:00</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://www.myrealtrip.com/community/posts/61965" target="_blank">마쓰야마 현지인 추천 도미밥 맛집 <span class="site">— 마이리얼트립</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>고시키 (五志喜)</h4>
+                <span class="tag">향토요리 노포</span>
+            </div>
+            <p class="rest-desc">400년 역사의 <b>오색소면</b>과 타이메시를 함께 즐길 수 있는 에히메 향토요리 전문점. 점심/저녁 메뉴가 달라 저녁 코스도 좋음.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 오카이도 상점가 부근</div>
+                <div><span class="k">추천</span> 오색소면 + 타이메시 세트</div>
+                <div><span class="k">가격</span> 런치 1,200~2,000엔</div>
+                <div><span class="k">영업</span> 11:00~22:00 / 화요일 휴무</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://www.myrealtrip.com/community/posts/48177" target="_blank">마쓰야마 맛집/카페 추천 <span class="site">— 마이리얼트립</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 1 간식/디저트 -->
+<div class="meal-section d1">
+    <div class="meal-header">
+        <div class="meal-type">🍦 저녁 산책 · 간식</div>
+        <h3>다카시마야 옥상 쿠루린 관람차 후 디저트</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 다카시마야 백화점 &middot; 오카이도 아케이드 내</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>다카시마야 백화점 식품관 (지하)</h4>
+                <span class="tag">원스톱</span>
+            </div>
+            <p class="rest-desc">백화점 데파치카에서 도시락·디저트·베이커리 한 번에 구매 가능. 호텔 가져가서 먹기 좋음. <b>일요 저녁 폐점 시간 반값 세일</b>(19:00 이후) 기회.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 마쓰야마시역 직결</div>
+                <div><span class="k">추천</span> 에히메 감귤 디저트, 벤또</div>
+                <div><span class="k">가격</span> 500~1,500엔</div>
+                <div><span class="k">영업</span> 10:00~20:00</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /day1 -->
+
+
+<!-- ═══════════════════════════════════════ -->
+<!-- ██████████  DAY 2  ██████████ -->
+<!-- ═══════════════════════════════════════ -->
+<div class="tab-section" data-tab="day2">
+
+<div class="day-banner d2">
+    <h2>DAY 2 &middot; 4/25(토) 도고온천 → JR 특급 → 다카마쓰</h2>
+    <div class="day-sub">아침 오카이도 → 도고온천(입욕 + 하이카라 거리 점심) → 16:30 JR 특급 → 19:00 다카마쓰 도착 → 효고마치 저녁</div>
+</div>
+
+<!-- DAY 2 아침 -->
+<div class="meal-section d2">
+    <div class="meal-header">
+        <div class="meal-type">🌅 아침</div>
+        <h3>호텔 조식 또는 오카이도 카페 간단히</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 도미인 마쓰야마 내 조식 &middot; 오카이도 아케이드</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>도미인 마쓰야마 조식 뷔페</h4>
+                <span class="tag pick">숙소 내</span>
+            </div>
+            <p class="rest-desc">도미인 브랜드의 <b>"야반 라멘"</b>(무료 야간 라멘)과 조식 뷔페가 유명. 에히메산 재료 사용. <b>조식 포함 예약이면 가장 편한 선택</b>. 도고온천 출발 전 충분히 먹기.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 호텔 내 레스토랑</div>
+                <div><span class="k">추천</span> 지역 향토요리 뷔페</div>
+                <div><span class="k">가격</span> 투숙객 1,500~2,000엔</div>
+                <div><span class="k">영업</span> 06:30~09:30경</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 2 점심 (하이카라 거리) -->
+<div class="meal-section d2">
+    <div class="meal-header">
+        <div class="meal-type">🍽️ 점심 &middot; 도고온천 관광 후</div>
+        <h3>도미밥 / 나베야키 우동 / 감귤 디저트</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 하이카라 거리(도고 상점가) 내 &middot; 도고온천 본관 도보 2분</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>코토리 (ことり) &mdash; 나베야키 우동</h4>
+                <span class="tag pick">오카이도 이동 시</span>
+            </div>
+            <p class="rest-desc"><b>1949년 창업</b> 노포. 마쓰야마식 나베야키우동은 알루미늄 냄비에 <b>달콤한 국물</b>, 푹 퍼진 부드러운 면이 특징. 한국 우동과는 전혀 다른 독특한 마쓰야마만의 맛. <b>매진 시 조기 마감!</b></p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 오카이도 긴텐가이 상점가 초입 (※하이카라 거리 아님)</div>
+                <div><span class="k">추천</span> 나베야키우동 (계란 토핑)</div>
+                <div><span class="k">가격</span> 500~700엔</div>
+                <div><span class="k">영업</span> 10:00~14:00</div>
+            </div>
+            <div class="tip">
+                <strong>동선 팁</strong>
+                오카이도 출발 전 or 도고온천 갔다 온 후 오카이도 복귀해서 먹을 수 있음. 도고온천 현지에서 점심 하려면 아래 10 FACTORY / 도고 식당가 이용.
+            </div>
+            <div class="rest-links">
+                <a href="https://iliketrip.net/%EB%A7%88%EC%93%B0%EC%95%BC%EB%A7%88-%EB%A7%9B%EC%A7%91-%EC%BD%94%ED%86%A0%EB%A6%AC-%EB%85%B8%ED%8F%AC-%EB%B6%84%EC%9C%84%EA%B8%B0-%EB%AC%BC%EC%94%AC-%EB%82%98%EB%8A%94-%EA%B3%B3%EC%97%90%EC%84%9C/" target="_blank">블로그 리뷰 <span class="site">— 여행좋아요</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>10 FACTORY (도고 본점)</h4>
+                <span class="tag">감귤 디저트</span>
+                <span class="tag walk">도고 도보 1분</span>
+            </div>
+            <p class="rest-desc">에히메 <b>감귤 전문 디저트 카페</b>. 품종별 감귤 주스 3종 비교 세트(약 700엔)와 귤 젤라또가 대표. 온슈밀감부터 이요칸까지 귤의 미묘한 맛 차이를 비교. <b>귤 맥주도 이곳에서만</b>.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 도고온천 하이카라 거리 내</div>
+                <div><span class="k">추천</span> 감귤 주스 3종 세트, 귤 젤라또</div>
+                <div><span class="k">가격</span> 500~900엔</div>
+                <div><span class="k">영업</span> 10:00~20:00경</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://www.visitehimejapan.com/ko/discover/stories/0054/" target="_blank">에히메현 공식 관광 사이트 <span class="site">— visitehimejapan</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>봇짱당고 · 츠보야 (つぼや)</h4>
+                <span class="tag">전통 간식</span>
+            </div>
+            <p class="rest-desc">나쓰메 소세키 소설 &lt;도련님&gt;에서 유래한 마쓰야마 대표 간식. <b>말차·황두·팥</b> 3색 3맛 당고. 대표 판매처는 <b>츠보야 과자점</b>. 하이카라 거리의 <b>유케무리 카페</b>에서도 당고와 차 세트로 즐길 수 있음.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 도고온천 하이카라 거리 일대</div>
+                <div><span class="k">추천</span> 3색 봇짱당고</div>
+                <div><span class="k">가격</span> 1꼬치 100~200엔</div>
+                <div><span class="k">영업</span> 매장별 상이</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 2 저녁 (다카마쓰) -->
+<div class="meal-section d2">
+    <div class="meal-header">
+        <div class="meal-type">🍺 저녁 &middot; 다카마쓰 첫 밤</div>
+        <h3>뼈 붙은 토리 (호네츠키도리) &middot; 카가와 명물</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> JR 다카마쓰역 도보권 &middot; 효고마치 / 라이언도리(ライオン通り) 아케이드 &middot; 숙소(JR호텔 클레멘트) 도보 5~10분</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>잇카쿠 다카마쓰점 (一鶴)</h4>
+                <span class="tag pick">원탑 추천</span>
+                <span class="tag walk">숙소 도보 7분</span>
+            </div>
+            <p class="rest-desc"><b>1952년 창업</b>, 호네츠키도리 <b>원조</b>. 스파이시한 양념에 구운 닭다리를 뼈째 뜯어 먹는 카가와 명물. 히나도리(영계, 부드러움)와 오야도리(노계, 쫄깃) 두 종류 선택. <b>기름에 양배추를 찍어 먹는 것</b>이 포인트!</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 다카마쓰 시내</div>
+                <div><span class="k">추천</span> 히나도리 + 오야도리 각 1 + 맥주</div>
+                <div><span class="k">가격</span> 1마리 ~1,200엔</div>
+                <div><span class="k">영업</span> 16:00~22:00 (정리권 제도)</div>
+            </div>
+            <div class="tip">
+                <strong>예약 팁</strong>
+                주말 저녁 대기 1시간+ 가능. 18시 전 입장 or <b>엔노트(Tabelog) 예약</b> 시도 권장. 정리권 받고 근처 카페 타임 가능.
+            </div>
+            <div class="rest-links">
+                <a href="https://www.kkday.com/ko/blog/35912/asia-japan-takamatsu-food" target="_blank">다카마쓰 맛집 BEST 4 <span class="site">— KKday</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>엔기야 (燕喜屋) &mdash; 야키토리 이자카야</h4>
+                <span class="tag">가성비 이자카야</span>
+            </div>
+            <p class="rest-desc">숯불 직화 야키토리. 주문 즉시 숯불에서 구워 나오는 <b>꼬치 1개 100엔대</b> 가성비. 불향이 뛰어나고 바 테이블에서 굽는 과정 구경 가능. 잇카쿠가 꽉 찼을 때 대안.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 다카마쓰 시내</div>
+                <div><span class="k">추천</span> 꼬치 세트 + 생맥주</div>
+                <div><span class="k">가격</span> 인당 2,500~3,500엔</div>
+                <div><span class="k">영업</span> 17:00~24:00경</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://kr.trip.com/moments/detail/takamatsu-56911-119550022/" target="_blank">엔기야 블로그 리뷰 <span class="site">— 트립닷컴</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>메리켄야 다카마쓰역점 (めりけんや)</h4>
+                <span class="tag">간단 우동 마무리</span>
+                <span class="tag walk">숙소 도보 2분</span>
+            </div>
+            <p class="rest-desc">부모님 피곤하면 <b>가볍게 우동 한 그릇</b>도 좋은 선택. 다카마쓰역 도보 1분, 20시까지 영업. 니쿠우동 430엔.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> JR 다카마쓰역 도보 1분</div>
+                <div><span class="k">추천</span> 니쿠우동 (고기우동) 430엔</div>
+                <div><span class="k">가격</span> 210~500엔</div>
+                <div><span class="k">영업</span> 07:00~20:00</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /day2 -->
+
+
+<!-- ═══════════════════════════════════════ -->
+<!-- ██████████  DAY 3  ██████████ -->
+<!-- ═══════════════════════════════════════ -->
+<div class="tab-section" data-tab="day3">
+
+<div class="day-banner d3">
+    <h2>DAY 3 &middot; 4/26(일) 나오시마 당일치기</h2>
+    <div class="day-sub">아침 다카마쓰항 → 페리 50분 → 나오시마(이에 프로젝트 · 지추 미술관 · 이우환) → 저녁 다카마쓰 복귀</div>
+</div>
+
+<!-- DAY 3 아침 (다카마쓰 페리 전) -->
+<div class="meal-section d3">
+    <div class="meal-header">
+        <div class="meal-type">🌅 아침 &middot; 페리 전 빠르게</div>
+        <h3>사누키 우동 &mdash; 역/항구 근처</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> JR 다카마쓰역 &middot; 다카마쓰항 도보권 &middot; 숙소(JR호텔 클레멘트) 도보 2분</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>메리켄야 다카마쓰역점 (めりけんや)</h4>
+                <span class="tag pick">페리 전 최적</span>
+                <span class="tag walk">숙소 도보 2분</span>
+            </div>
+            <p class="rest-desc">카케우동 210엔, 니쿠우동 430엔. 달짝지근하게 졸인 소고기가 듬뿍 올라간 <b>니쿠우동</b>이 추천. 2단계 숙성 면으로 쫄깃함이 좋음. <b>07:00 오픈</b>이라 아침 우동으로 최적. 회전율 빠름.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> JR 다카마쓰역 도보 1분</div>
+                <div><span class="k">추천</span> 니쿠우동 (고기우동) 430엔</div>
+                <div><span class="k">가격</span> 210~500엔</div>
+                <div><span class="k">영업</span> 07:00~20:00</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://tommysdiner.net/4152" target="_blank">블로그 리뷰 <span class="site">— tommysdiner</span></a>
+                <a href="https://kr.trip.com/moments/detail/takamatsu-56911-125706345/" target="_blank">트립닷컴 리뷰 <span class="site">— 트립닷컴</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>우동바카이치다이 (うどんバカ一代)</h4>
+                <span class="tag">카마버터 원조</span>
+            </div>
+            <p class="rest-desc">갓 삶은 뜨거운 면 위에 <b>버터 한 조각, 날달걀, 특제 간장, 후추</b>를 넣어 비벼 먹는 "카마버터우동"이 시그니처. 고급 카르보나라 파스타 같은 맛. <b>아침 6시 오픈</b>이라 극초기 출발 시 가능.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 가와라마치역 도보 10분 (역에서 멀어짐)</div>
+                <div><span class="k">추천</span> 카마버터우동 (釜バターうどん)</div>
+                <div><span class="k">가격</span> 500~700엔</div>
+                <div><span class="k">영업</span> 06:00~18:00</div>
+            </div>
+            <div class="tip">
+                <strong>동선 주의</strong>
+                숙소에서 편도 15~20분. 페리 09:12 탑승 고려 시 <b>메리켄야가 훨씬 효율적</b>. 피크 시간 대기 최대 90분.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 3 점심 (나오시마 혼무라) -->
+<div class="meal-section d3">
+    <div class="meal-header">
+        <div class="meal-type">🍱 점심 &middot; 나오시마 섬 안에서</div>
+        <h3>혼무라(本村) 지구 &mdash; 이에 프로젝트 관람 직후</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 혼무라 지구 &middot; 지추 미술관 12:45 입장 고려 &middot; 혼무라 → 지추 버스 10분</div>
+    </div>
+    <div class="meal-body">
+        <div class="tip">
+            <strong>⏰ 시간 관리 중요</strong>
+            이에 프로젝트 → 점심 → 지추 12:45 입장 시간에 늦지 않게. <b>11:30~12:15 사이 간단히</b> 먹는 것 목표. 지추 근처엔 카페가 없으니 혼무라에서 해결.
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>이시이 쇼텐 (石井商店 / Ishii Shouten)</h4>
+                <span class="tag pick">혼무라 사누키 우동</span>
+            </div>
+            <p class="rest-desc">혼무라 마을 안에 있는 <b>작은 사누키 우동 집</b>. 손으로 직접 뽑는 면. 작지만 현지인도 많이 오는 곳으로, 기다림이 있어도 값진 맛. <b>빠르게 먹고 지추로 이동</b>하기 좋음.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 혼무라 지구 중심</div>
+                <div><span class="k">추천</span> 가케우동, 붓카케우동</div>
+                <div><span class="k">가격</span> 400~700엔</div>
+                <div><span class="k">영업</span> 점심 위주 &middot; 매진 시 조기 마감</div>
+            </div>
+            <div class="rest-links">
+                <a href="https://finding-naoshima.co.jp/naoshimas-best-restaurants/" target="_blank">나오시마 식당 가이드 <span class="site">— Finding Naoshima</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>마이마이 (maimai) &mdash; 나오시마 버거</h4>
+                <span class="tag">테이크아웃 가능</span>
+            </div>
+            <p class="rest-desc">차고를 개조한 <b>개러지 다이닝 카페</b>. 시그니처는 <b>나오시마 버거</b> &mdash; 신선한 하마치(방어)를 두툼한 빵에 끼운 로컬 피시 버거. 테이크아웃해서 <b>걸으면서 지추로 이동</b> 가능.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 혼무라 지구</div>
+                <div><span class="k">추천</span> 나오시마 버거 (하마치)</div>
+                <div><span class="k">가격</span> 900~1,300엔</div>
+                <div><span class="k">영업</span> 런치 11:00~15:00경</div>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>혼무라 라운지 &amp; 아카이브 카페 (本村ラウンジ)</h4>
+                <span class="tag">휴식 포인트</span>
+            </div>
+            <p class="rest-desc">이에 프로젝트 티켓센터 겸 카페. 간단한 <b>오니기리·샌드위치·커피</b>. 티켓 수령과 점심을 한 번에 해결 가능. 서두를 때 최선의 선택.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 혼무라 티켓센터</div>
+                <div><span class="k">추천</span> 오니기리, 커피</div>
+                <div><span class="k">가격</span> 400~800엔</div>
+                <div><span class="k">영업</span> 이에 프로젝트 운영 시간 중</div>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>FRANCOILE (프랑수아일)</h4>
+                <span class="tag">카페 · 여유 시</span>
+            </div>
+            <p class="rest-desc">혼무라의 작은 <b>프렌치 스타일 카페</b>. 베이커리 샌드위치, 케이크, 커피. 시간 여유 있으면 천천히 앉아 갈 곳. 단, 12:45 지추 입장 고려 시 <b>빠른 메뉴로</b>.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 혼무라 지구 안</div>
+                <div><span class="k">추천</span> 샌드위치, 케이크</div>
+                <div><span class="k">가격</span> 700~1,500엔</div>
+                <div><span class="k">영업</span> 런치 타임 중심</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 3 저녁 (다카마쓰 복귀 후) -->
+<div class="meal-section d3">
+    <div class="meal-header">
+        <div class="meal-type">🍽️ 저녁 &middot; 다카마쓰 복귀</div>
+        <h3>기타하마앨리 / 효고마치 저녁 · 감성 카페 또는 이자카야</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 다카마쓰항 하선 후 도보권 &middot; 기타하마앨리 &middot; 효고마치 &middot; 숙소(JR호텔 클레멘트) 도보 5~10분</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>기타하마앨리 UMIE (北浜alley · umie)</h4>
+                <span class="tag pick">감성 저녁</span>
+            </div>
+            <p class="rest-desc">1900년대 초 <b>해운 창고를 리모델링</b>한 복합 문화공간. 대표 카페 <b>UMIE</b>는 바다가 보이는 레트로 분위기. 가벼운 파스타/샌드위치/커피. 페리 하선 직후 도보 접근성 좋음.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 기타하마항 근처 (다카마쓰항 도보 10분)</div>
+                <div><span class="k">추천</span> UMIE 카페 파스타 · 커피</div>
+                <div><span class="k">가격</span> 1,000~2,000엔</div>
+                <div><span class="k">영업</span> 매장마다 다름 &middot; <b>화요일 휴무 주의</b></div>
+            </div>
+            <div class="rest-links">
+                <a href="https://shikoku-guide.com/ko/information/umie/" target="_blank">umie 공식 <span class="site">— SHIKOKU GUIDE</span></a>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>잇카쿠 (一鶴) &mdash; DAY 2 못 갔다면</h4>
+                <span class="tag">호네츠키도리</span>
+            </div>
+            <p class="rest-desc">DAY 2에 못 갔으면 여기서. 4인 가족 여행의 <b>마지막 다카마쓰 저녁</b>에 명물 한 번쯤 먹어볼 가치. 자세한 정보는 DAY 2 탭 참고.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 다카마쓰 시내</div>
+                <div><span class="k">영업</span> 16:00~22:00</div>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>다카마쓰역·효고마치 이자카야·우동집</h4>
+                <span class="tag">자유 탐색</span>
+            </div>
+            <p class="rest-desc">나오시마에서 페리로 돌아와 피곤하면 <b>효고마치 아케이드</b>(라이언도리)에서 가볍게. 우동·라멘·야키토리 전부 있음. 구글맵 &laquo;효고마치 저녁&raquo; 검색 시 평점 4.0+ 필터 추천.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 효고마치 / 라이언도리 아케이드</div>
+                <div><span class="k">가격</span> 인당 1,500~3,000엔</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /day3 -->
+
+
+<!-- ═══════════════════════════════════════ -->
+<!-- ██████████  DAY 4  ██████████ -->
+<!-- ═══════════════════════════════════════ -->
+<div class="tab-section" data-tab="day4">
+
+<div class="day-banner d4">
+    <h2>DAY 4 &middot; 4/27(월) 리쓰린공원 → 다카마쓰 공항 → 귀국</h2>
+    <div class="day-sub">아침 호텔 근처 우동 → 리쓰린공원 산책 → 공항 리무진 → 다카마쓰 공항</div>
+</div>
+
+<!-- DAY 4 아침 -->
+<div class="meal-section d4">
+    <div class="meal-header">
+        <div class="meal-type">🌅 마지막 아침 &middot; 사누키 우동 한 그릇</div>
+        <h3>체크아웃 동선상 아침 우동</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 호텔(JR호텔 클레멘트) 근처 &middot; 다카마쓰역 &middot; 리쓰린공원</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>메리켄야 다카마쓰역점 (めりけんや)</h4>
+                <span class="tag pick">가장 빠른 선택</span>
+                <span class="tag walk">숙소 도보 2분</span>
+            </div>
+            <p class="rest-desc">체크아웃 후 캐리어 들고 바로 방문 가능. <b>07:00 오픈</b>이라 이른 비행기도 OK. 니쿠우동 430엔으로 가성비 최고. 회전율 빨라 대기 없음.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> JR 다카마쓰역 도보 1분</div>
+                <div><span class="k">추천</span> 니쿠우동, 부카케우동</div>
+                <div><span class="k">가격</span> 210~500엔</div>
+                <div><span class="k">영업</span> 07:00~20:00</div>
+            </div>
+        </div>
+
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>우에하라야 본점 (上原屋本店)</h4>
+                <span class="tag pick">리쓰린공원 산책 후</span>
+            </div>
+            <p class="rest-desc"><b>리쓰린공원 바로 앞</b> 셀프 우동집. 직접 면을 데쳐 튀김을 골라 먹는 방식. 큰 사이즈도 450엔. 사누키우동 특유의 탱글한 면발과 맑은 국물. <b>아침 산책 → 우동 → 공항</b> 동선 완벽.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 리쓰린공원 바로 앞</div>
+                <div><span class="k">추천</span> 가케우동 + 튀김 토핑</div>
+                <div><span class="k">가격</span> 300~500엔</div>
+                <div><span class="k">영업</span> 09:30~14:30 (면 소진 시 조기 마감)</div>
+            </div>
+            <div class="tip">
+                <strong>동선 추천</strong>
+                숙소 체크아웃 → 짐 코인로커/호텔 보관 → <b>리쓰린공원 산책(1시간)</b> → 우에하라야 아침/점심 겸 → 호텔 복귀 → 공항 리무진.
+            </div>
+            <div class="rest-links">
+                <a href="https://brunch.co.kr/@kkamdangnyang/87" target="_blank">브런치 리뷰 <span class="site">— 브런치</span></a>
+                <a href="https://m.ruliweb.com/hobby/board/300117/read/30676974" target="_blank">우에하라야 본점 <span class="site">— 루리웹</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAY 4 기내·공항 -->
+<div class="meal-section d4">
+    <div class="meal-header">
+        <div class="meal-type">✈️ 공항 &middot; 기내식 보조</div>
+        <h3>다카마쓰 공항 식당가</h3>
+        <div class="meal-location">📍 <b>검색 기준:</b> 다카마쓰 공항 터미널 2F</div>
+    </div>
+    <div class="meal-body">
+        <div class="rest-card">
+            <div class="rest-title">
+                <h4>공항 2F 레스토랑·편의점</h4>
+                <span class="tag">마지막 선물</span>
+            </div>
+            <p class="rest-desc">사누키 우동 식당과 카가와 특산품 매장이 있음. <b>가마타마 우동 밀키트</b>·올리브 오일·와산본(和三盆) 설탕 등 선물용 구매 가능. 기내 반입 액체류는 <b>100ml 이하</b> 주의.</p>
+            <div class="rest-meta">
+                <div><span class="k">위치</span> 다카마쓰 공항 2F</div>
+                <div><span class="k">추천</span> 가마타마 우동 밀키트, 와산본</div>
+                <div><span class="k">가격</span> 500~3,000엔</div>
+                <div><span class="k">영업</span> 항공편 운항 시간</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /day4 -->
+
+
+<!-- ══════════ 요약 박스 ══════════ -->
+<div class="summary">
+    <h3>🎯 한눈에 보는 맛집 우선순위</h3>
+    <ul>
+        <li><b>DAY 1 저녁</b> &mdash; 타이메시 아키요시 (도미밥) · 오카이도</li>
+        <li><b>DAY 2 점심</b> &mdash; 코토리 (나베야키우동, 오카이도) 또는 10 FACTORY (도고)</li>
+        <li><b>DAY 2 저녁</b> &mdash; 잇카쿠 (호네츠키도리) · 다카마쓰 첫 밤</li>
+        <li><b>DAY 3 아침</b> &mdash; 메리켄야 (역 도보 1분, 페리 전 빠르게)</li>
+        <li><b>DAY 3 점심</b> &mdash; 이시이 쇼텐 or 마이마이 (혼무라, 지추 12:45 전)</li>
+        <li><b>DAY 3 저녁</b> &mdash; 기타하마앨리 UMIE (감성) or 잇카쿠 (못 갔으면)</li>
+        <li><b>DAY 4 아침</b> &mdash; 메리켄야 (빠름) or 우에하라야 (리쓰린 코스)</li>
+    </ul>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+    이 문서는 2026년 4월 기준. 영업시간·메뉴·가격은 방문 전 재확인.<br>
+    기본 자료: <a href="맛집_가이드.html" style="color:#2e7d32;">맛집_가이드.html</a> (지역별 14곳 상세)
+</div>
+
+<!-- ══════════ 탭 스위칭 JS ══════════ -->
+<script>
+(function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.tab-section');
+    const valid = ['day1', 'day2', 'day3', 'day4'];
+
+    function activateTab(name) {
+        if (!valid.includes(name)) name = 'day1';
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+        sections.forEach(s => s.classList.toggle('active', s.dataset.tab === name));
+        const nav = document.querySelector('.tab-nav');
+        if (nav) {
+            const top = nav.getBoundingClientRect().top + window.scrollY;
+            if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' });
+        }
+    }
+    tabs.forEach(t => t.addEventListener('click', () => {
+        const name = t.dataset.tab;
+        activateTab(name);
+        history.replaceState(null, '', '#' + name);
+    }));
+    window.addEventListener('hashchange', () => {
+        activateTab(location.hash.replace('#', ''));
+    });
+    const initial = location.hash.replace('#', '') || 'day1';
+    activateTab(initial);
+})();
+</script>
+
+</body>
+</html>
