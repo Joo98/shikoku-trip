@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나오시마 이동수단 가이드 (우천 대비)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        :root {
+            --primary:#0f3460; --primary-light:#16537e; --accent:#e8913a;
+            --bg:#f4f7fa; --card-bg:#fff; --text:#2c2c2c; --text-light:#6b6b6b; --border:#dde4ec;
+            --bus:#16a085; --shuttle:#8e44ad; --bike:#27ae60; --walk:#7f8c8d; --taxi:#e67e22;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:15px; }
+
+        .hero { background:linear-gradient(135deg,#0f3460 0%,#16537e 50%,#2980b9 100%); color:#fff; padding:50px 40px; text-align:center; position:relative; overflow:hidden; }
+        .hero::after {
+            content:'☂'; position:absolute; right:30px; top:20px; font-size:5em; opacity:0.13;
+            transform:rotate(-15deg);
+        }
+        .hero .badge { display:inline-block; background:rgba(255,255,255,0.18); padding:4px 16px; border-radius:15px; font-size:0.85em; margin-bottom:10px; }
+        .hero h1 { font-size:2em; font-weight:900; letter-spacing:-1px; margin-bottom:6px; }
+        .hero .subtitle { font-size:1em; font-weight:300; opacity:0.92; }
+        .hero .back-link { display:inline-block; margin-top:16px; color:rgba(255,255,255,0.85); text-decoration:none; font-size:0.9em; border:1px solid rgba(255,255,255,0.35); padding:6px 20px; border-radius:20px; }
+        .hero .back-link:hover { background:rgba(255,255,255,0.12); color:#fff; }
+
+        .container { max-width:900px; margin:0 auto; padding:30px 20px 40px; }
+
+        .quick-nav { background:#fff; border-radius:14px; padding:14px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:24px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+        .quick-nav a { display:inline-block; background:#eef3f8; color:var(--text); padding:6px 14px; border-radius:20px; text-decoration:none; font-size:0.85em; font-weight:500; transition:all 0.2s; }
+        .quick-nav a:hover { background:var(--primary); color:#fff; }
+
+        .rain-banner {
+            background:linear-gradient(135deg, #5d6d7e 0%, #34495e 100%);
+            color:#fff; border-radius:16px; padding:22px 26px; margin-bottom:24px;
+            display:flex; align-items:center; gap:18px;
+        }
+        .rain-banner .icon { font-size:2.4em; flex-shrink:0; }
+        .rain-banner .content { flex:1; }
+        .rain-banner h3 { font-size:1.05em; margin-bottom:4px; }
+        .rain-banner p { font-size:0.9em; opacity:0.95; line-height:1.6; }
+
+        .card { background:var(--card-bg); border-radius:16px; margin-bottom:22px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden; }
+        .card-header { padding:18px 26px; color:#fff; display:flex; align-items:center; gap:12px; }
+        .card-header h2 { font-size:1.15em; font-weight:700; flex:1; }
+        .card-header .tag { background:rgba(255,255,255,0.22); padding:3px 12px; border-radius:14px; font-size:0.72em; font-weight:600; }
+        .card-body { padding:24px 26px; }
+
+        .h-bus { background:var(--bus); }
+        .h-shuttle { background:var(--shuttle); }
+        .h-bike { background:var(--bike); }
+        .h-walk { background:var(--walk); }
+        .h-taxi { background:var(--taxi); }
+        .h-compare { background:var(--primary); }
+        .h-route { background:#c0392b; }
+        .h-pack { background:#b8441d; }
+
+        .compare-table { width:100%; border-collapse:collapse; font-size:0.88em; margin-top:6px; }
+        .compare-table th { background:var(--primary); color:#fff; padding:10px 12px; text-align:left; font-weight:500; font-size:0.85em; }
+        .compare-table td { padding:11px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+        .compare-table tr:nth-child(even) td { background:#f8fafc; }
+        .compare-table .ok { color:#27ae60; font-weight:700; }
+        .compare-table .ng { color:#c0392b; font-weight:700; }
+        .compare-table .warn { color:#e67e22; font-weight:700; }
+        .compare-table .means { font-weight:700; }
+
+        .info-box { background:#eef5fc; border-left:4px solid #2980b9; border-radius:0 12px 12px 0; padding:14px 18px; margin:14px 0; font-size:0.92em; }
+        .info-box.warn { background:#fff8ec; border-left-color:var(--accent); }
+        .info-box.danger { background:#fff4f4; border-left-color:#c0392b; }
+        .info-box.green { background:#f0f7e8; border-left-color:#27ae60; }
+        .info-box strong { display:block; margin-bottom:4px; font-size:0.98em; }
+
+        .steps { counter-reset:step; padding:0; list-style:none; margin:10px 0; }
+        .steps li {
+            position:relative; padding:12px 16px 12px 50px; margin-bottom:10px;
+            background:#f5faf7; border-radius:10px; border:1px solid #deefe3;
+            font-size:0.9em; line-height:1.55;
+        }
+        .steps li::before {
+            counter-increment:step; content:counter(step);
+            position:absolute; left:14px; top:13px; width:24px; height:24px;
+            background:var(--bus); color:#fff; border-radius:50%; text-align:center; line-height:24px;
+            font-weight:700; font-size:0.85em;
+        }
+        .steps li b { color:var(--primary); }
+        .steps.shuttle li::before { background:var(--shuttle); }
+        .steps.bike li::before { background:var(--bike); }
+        .steps.taxi li::before { background:var(--taxi); }
+
+        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+        .detail-item { background:#f6f9fc; border-radius:10px; padding:14px; }
+        .detail-item .label { font-size:0.74em; text-transform:uppercase; color:var(--accent); font-weight:700; letter-spacing:0.5px; margin-bottom:4px; }
+        .detail-item .value { font-size:0.92em; font-weight:500; line-height:1.5; }
+
+        .scenario {
+            border:2px dashed #cbd6e2; border-radius:14px; padding:18px 22px; margin:16px 0;
+        }
+        .scenario h4 {
+            font-size:1em; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #e8ecf2;
+            display:flex; align-items:center; gap:8px;
+        }
+        .scenario.dry { background:#fffdf7; border-color:#f1c40f; }
+        .scenario.dry h4 { color:#b88a00; }
+        .scenario.rain { background:#f4f8fc; border-color:#2980b9; }
+        .scenario.rain h4 { color:#1f5d8a; }
+
+        .timeline-flow { display:flex; flex-direction:column; gap:6px; margin:8px 0 4px; }
+        .flow-row { display:flex; align-items:flex-start; gap:10px; font-size:0.9em; padding:6px 0; }
+        .flow-row .t { flex-shrink:0; width:60px; font-weight:700; color:var(--primary); font-size:0.86em; }
+        .flow-row .arrow { color:var(--accent); flex-shrink:0; }
+        .flow-row .desc { flex:1; }
+        .flow-row .means-tag {
+            display:inline-block; background:#eee; color:#555; padding:1px 8px; border-radius:10px;
+            font-size:0.74em; margin-left:6px; font-weight:600;
+        }
+        .means-tag.bus { background:#d4f1ea; color:#0e6a5a; }
+        .means-tag.shuttle { background:#e8d8f0; color:#5e3473; }
+        .means-tag.bike { background:#d4f0d8; color:#1e7a32; }
+        .means-tag.walk { background:#e8eaeb; color:#555; }
+        .means-tag.taxi { background:#fce4cf; color:#a14d0e; }
+
+        .sources { background:var(--card-bg); border-radius:16px; padding:24px; margin-top:30px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .sources h3 { font-size:1.05em; color:var(--primary); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+        .sources ul { list-style:none; padding:0; }
+        .sources li { padding:6px 0; font-size:0.86em; border-bottom:1px dotted #eee; }
+        .sources li:last-child { border-bottom:none; }
+        .sources a { color:var(--primary-light); text-decoration:none; }
+        .sources a:hover { text-decoration:underline; }
+
+        .footer { text-align:center; padding:24px; color:var(--text-light); font-size:0.85em; }
+
+        @media print { body{background:#fff;font-size:13px;} .card,.sources{box-shadow:none;border:1px solid #ddd; break-inside:avoid;} .quick-nav{display:none;} .rain-banner{break-inside:avoid;} }
+        @media (max-width:700px) {
+            .detail-grid{grid-template-columns:1fr;}
+            .hero{padding:35px 20px;}
+            .hero h1{font-size:1.5em;}
+            .hero::after{display:none;}
+            .rain-banner{flex-direction:column; text-align:center;}
+            .compare-table { font-size:0.78em; }
+            .compare-table th, .compare-table td { padding:8px 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="badge">DAY 3 · 4/26(일) · 우천 대비</div>
+    <h1>나오시마 섬 내 이동수단 가이드</h1>
+    <div class="subtitle">마치버스 · 베네세 셔틀 · 자전거 · 도보 · 택시 — 비 와도 OK</div>
+    <a href="index.html" class="back-link">&larr; 메인으로</a>
+</div>
+
+<div class="container">
+
+<!-- 우천 배너 -->
+<div class="rain-banner">
+    <div class="icon">🌧️</div>
+    <div class="content">
+        <h3>일기예보 — 4/26(일) 비 가능성 있음</h3>
+        <p>e-bike 매진/우천 시 <b>마치버스 + 베네세 무료 셔틀</b> 조합으로 충분히 다닐 수 있습니다.
+        12:45 지추 미술관 입장 시간만 놓치지 않으면 동선은 유연하게 조정 가능.</p>
+    </div>
+</div>
+
+<div class="quick-nav">
+    <a href="#compare">📊 한눈에 비교</a>
+    <a href="#bus">🚌 마치버스</a>
+    <a href="#shuttle">🎨 베네세 셔틀</a>
+    <a href="#bike">🚲 자전거</a>
+    <a href="#walk">👣 도보</a>
+    <a href="#taxi">🚖 택시</a>
+    <a href="#scenario">🌦️ 시나리오별 동선</a>
+    <a href="#pack">🧳 우천 준비물</a>
+</div>
+
+<!-- ════════ 한눈에 비교 ════════ -->
+<div id="compare" class="card">
+    <div class="card-header h-compare">
+        <h2>📊 5가지 이동수단 한눈에 비교</h2>
+    </div>
+    <div class="card-body">
+        <table class="compare-table">
+            <thead>
+                <tr>
+                    <th>수단</th>
+                    <th>요금</th>
+                    <th>커버 구간</th>
+                    <th>우천</th>
+                    <th>예약</th>
+                    <th>한 줄 평</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="means" style="color:var(--bus);">🚌 마치버스</td>
+                    <td>¥100<br>(어린이 ¥50)</td>
+                    <td>미야노우라항 ↔ 혼무라 ↔ 츠츠지소</td>
+                    <td class="ok">✓ 영향 없음</td>
+                    <td>불필요</td>
+                    <td>비 와도 가장 안정적. 동전 필수</td>
+                </tr>
+                <tr>
+                    <td class="means" style="color:var(--shuttle);">🎨 베네세 셔틀</td>
+                    <td class="ok">무료</td>
+                    <td>츠츠지소 ↔ 베네세 ↔ 이우환 ↔ 지추</td>
+                    <td class="ok">✓ 영향 없음</td>
+                    <td>불필요</td>
+                    <td>미술관 구역 내부 전용. 30분 간격</td>
+                </tr>
+                <tr>
+                    <td class="means" style="color:var(--bike);">🚲 자전거 / e-bike</td>
+                    <td>¥500 / ¥1,500</td>
+                    <td>섬 전체 (구릉 많음)</td>
+                    <td class="ng">✗ 비 시 비추</td>
+                    <td>워크인</td>
+                    <td>맑으면 베스트, 비면 위험·불편</td>
+                </tr>
+                <tr>
+                    <td class="means" style="color:var(--walk);">👣 도보</td>
+                    <td class="ok">무료</td>
+                    <td>미야노우라 ↔ 혼무라 약 30분</td>
+                    <td class="warn">△ 우산 필요</td>
+                    <td>—</td>
+                    <td>비+부모님 동행 시 부담</td>
+                </tr>
+                <tr>
+                    <td class="means" style="color:var(--taxi);">🚖 택시</td>
+                    <td>미터제 (高め)</td>
+                    <td>섬 전체 (예약 권장)</td>
+                    <td class="ok">✓ 가장 편함</td>
+                    <td>전화 권장</td>
+                    <td>비상시 백업. 일본어 통화 부담</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="info-box green">
+            <strong>💡 우리 가족 추천 조합</strong>
+            <b>맑음:</b> e-bike 4대 (워크인) → 섬 자유롭게 + 12:45 지추는 셔틀 환승<br>
+            <b>비:</b> <b>마치버스 + 베네세 셔틀 100% 의존</b> — 가장 안전하고 부모님께도 부담 적음
+        </div>
+    </div>
+</div>
+
+<!-- ════════ 마치버스 ════════ -->
+<div id="bus" class="card">
+    <div class="card-header h-bus">
+        <h2>🚌 나오시마 마치버스 (町営バス, Town Bus)</h2>
+        <span class="tag">우천 대비 1순위</span>
+    </div>
+    <div class="card-body">
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">노선</div>
+                <div class="value"><b>미야노우라항(宮浦港) ↔ 혼무라(本村) ↔ 츠츠지소(つつじ荘)</b><br>섬을 가로지르는 핵심 노선</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">요금</div>
+                <div class="value"><b>성인 ¥100 / 어린이 ¥50 (균일)</b><br>동전만 사용 — 거스름돈 없음</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">소요 시간</div>
+                <div class="value">미야노우라 → 혼무라 약 5분<br>미야노우라 → 츠츠지소 약 15분</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">배차</div>
+                <div class="value">대략 30분~1시간 간격<br>(공식 시각표 PDF 확인)</div>
+            </div>
+        </div>
+
+        <h4 style="margin-top:18px; color:var(--bus); font-size:1em;">🚏 타는 법 (4단계)</h4>
+        <ol class="steps">
+            <li><b>정류장 위치 확인</b> — 미야노우라항 페리에서 내리면 광장 좌측. 혼무라는 마을 입구. 츠츠지소는 베네세 구역 입구.</li>
+            <li><b>뒷문(乗口)으로 승차</b> — 일본 시내버스 공통 구조. IC카드 사용 불가, <b>현금만</b>.</li>
+            <li><b>안내방송으로 다음 정류장 확인</b> — 한자·영문 표기. "혼무라(本村)" "츠츠지소(つつじ荘)" 잘 듣기.</li>
+            <li><b>앞문으로 내리며 ¥100 동전을 요금통에</b> — 정확한 금액. 부족하면 옆 동전교환기로 1,000엔 지폐 교환.</li>
+        </ol>
+
+        <div class="info-box warn">
+            <strong>⚠️ 주말 오후 혼잡 주의</strong>
+            나오시마 관광협회 공식 안내: <b>"주말 오후와 휴일 츠츠지소 → 혼무라 → 미야노우라항 구간은 매우 혼잡하여 탑승 불가능할 수 있음"</b>.
+            특히 4/26(일)은 GW 직전 일요일 → 오후 늦게 페리 타러 돌아갈 때 한두 대 놓칠 가능성. <b>여유 시간 30분 이상 두고 움직이기.</b>
+        </div>
+
+        <div class="info-box">
+            <strong>💴 100엔 동전 미리 준비!</strong>
+            한 사람 왕복 ¥200 × 4명 = ¥800 + 환승 위험 대비 ¥1,200 정도 동전으로 가지고 가세요.
+            온천에서도 락커비로 ¥100 동전 자주 쓰니 어차피 필요.
+        </div>
+    </div>
+</div>
+
+<!-- ════════ 베네세 셔틀 ════════ -->
+<div id="shuttle" class="card">
+    <div class="card-header h-shuttle">
+        <h2>🎨 베네세 무료 셔틀버스 (Free Shuttle)</h2>
+        <span class="tag">무료 · 미술관 전용</span>
+    </div>
+    <div class="card-body">
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">노선</div>
+                <div class="value"><b>츠츠지소 ↔ 베네세 하우스 뮤지엄 ↔ 이우환 미술관 ↔ 지추 미술관</b></div>
+            </div>
+            <div class="detail-item">
+                <div class="label">요금</div>
+                <div class="value" style="color:#27ae60;"><b>완전 무료</b><br>예약 불필요, 누구나 탑승</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">배차</div>
+                <div class="value"><b>30분 간격</b><br>혼잡일은 15분 간격 운행</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">휴일</div>
+                <div class="value"><b>월요일</b> (지추·이우환 휴관일) — 4/26은 일요일이라 정상 운행</div>
+            </div>
+        </div>
+
+        <ol class="steps shuttle">
+            <li><b>마치버스로 츠츠지소 정류장 도착</b> → 길 건너편에 베네세 셔틀 정류장.</li>
+            <li><b>"지추(Chichu)"행 탑승</b> — 운전사에게 "Chichu, please"면 충분.</li>
+            <li><b>약 5~10분 후 지추 미술관 도착</b> → 입장 예약 시간(12:45) 10분 전 도착하도록 역산.</li>
+            <li><b>관람 후 같은 정류장에서 다시 셔틀</b> → 베네세 하우스 또는 츠츠지소 방향.</li>
+        </ol>
+
+        <div class="info-box">
+            <strong>🔗 공식 시각표</strong>
+            <a href="https://benesse-artsite.jp/en/stay/FreeBus_timetable_en.pdf" target="_blank">benesse-artsite.jp 셔틀 PDF (영문)</a>
+            — 출국 전에 PDF 다운로드해서 폰에 저장해두세요. 섬 안 와이파이 약함.
+        </div>
+
+        <div class="info-box warn">
+            <strong>⚠️ 12:45 지추 입장 시간 역산</strong>
+            츠츠지소 셔틀 → 지추 도착까지 약 10분. <b>늦어도 12:25에는 츠츠지소 셔틀 정류장에 있어야 안전</b>.
+            마치버스로 미야노우라 → 츠츠지소 15분 + 셔틀 환승 대기 + 셔틀 10분 = <b>최소 40분 여유</b>.
+        </div>
+    </div>
+</div>
+
+<!-- ════════ 자전거 ════════ -->
+<div id="bike" class="card">
+    <div class="card-header h-bike">
+        <h2>🚲 자전거 / e-bike (워크인)</h2>
+        <span class="tag">맑은 날 베스트</span>
+    </div>
+    <div class="card-body">
+        <div class="info-box danger">
+            <strong>🌧️ 비 오면 비추!</strong>
+            나오시마는 <b>구릉이 많고 좁은 길</b>이 많아 우중 자전거는 위험. e-bike 매진/우천 시 미련 없이 마치버스로 전환하세요.
+        </div>
+
+        <h4 style="margin-top:6px; color:var(--bike); font-size:1em;">📍 미야노우라항 도보 1분 내 대여점 (워크인)</h4>
+        <table class="compare-table" style="margin-top:8px;">
+            <tr>
+                <th>업체</th><th>e-bike 가격</th><th>일반 자전거</th><th>오픈</th><th>전화</th>
+            </tr>
+            <tr>
+                <td><b>OUGIYA (오기야)</b></td>
+                <td>¥1,500/일</td>
+                <td>—</td>
+                <td>08:00</td>
+                <td>090-3189-0471</td>
+            </tr>
+            <tr>
+                <td><b>TVC 미야노우라점</b></td>
+                <td>¥1,500/일</td>
+                <td>¥500/일 (기어)</td>
+                <td>09:00</td>
+                <td>087-892-3212</td>
+            </tr>
+            <tr>
+                <td>Evening calm</td>
+                <td>¥1,500/일</td>
+                <td>—</td>
+                <td>08:00</td>
+                <td>087-892-3046</td>
+            </tr>
+        </table>
+
+        <ol class="steps bike">
+            <li><b>9시 이전 도착</b> — GW 직전 일요일이라 매진 우려. 가족 4명 분담해서 OUGIYA·TVC 동시 탐색.</li>
+            <li><b>e-bike 매진이어도 일반 기어 자전거(¥500)는 대부분 남음</b> — 부모님은 e-bike, 자녀는 일반으로 분산 OK.</li>
+            <li><b>둘 다 안 되면 망설이지 말고 마치버스</b>. 시간 낭비 X.</li>
+        </ol>
+
+        <div class="info-box warn">
+            <strong>📌 OUGIYA — 전기자전거 워크인 정책으로 변경</strong>
+            과거 온라인 예약 가능했으나 현재는 <b>e-bike는 선착순 워크인만</b> 운영 중 (현장 확인된 정보).
+        </div>
+    </div>
+</div>
+
+<!-- ════════ 도보 ════════ -->
+<div id="walk" class="card">
+    <div class="card-header h-walk">
+        <h2>👣 도보</h2>
+        <span class="tag">단거리만</span>
+    </div>
+    <div class="card-body">
+        <table class="compare-table">
+            <tr><th>구간</th><th>거리</th><th>도보 시간</th><th>비 올 때</th></tr>
+            <tr><td>미야노우라항 → 혼무라</td><td>약 2km</td><td>25~30분</td><td class="warn">△ 부담</td></tr>
+            <tr><td>혼무라 → 츠츠지소</td><td>약 1.5km</td><td>20분</td><td class="ng">✗ 오르막 있음</td></tr>
+            <tr><td>혼무라 마을 내부 (이에 프로젝트)</td><td>—</td><td>걸으며 관람</td><td class="ok">✓ 우산 OK</td></tr>
+            <tr><td>지추 ↔ 이우환 ↔ 베네세 (셔틀 정류장 사이)</td><td>각 5~10분</td><td>—</td><td class="warn">△ 셔틀이 더 편함</td></tr>
+        </table>
+
+        <div class="info-box green">
+            <strong>💡 도보가 빛나는 구간</strong>
+            <b>혼무라 마을 내부 "이에 프로젝트(家プロジェクト)"</b>는 어차피 마을길을 걸어 다니며 관람하는 형식. 우산만 챙기면 비 와도 정취 있음.
+        </div>
+    </div>
+</div>
+
+<!-- ════════ 택시 ════════ -->
+<div id="taxi" class="card">
+    <div class="card-header h-taxi">
+        <h2>🚖 택시 (비상 백업)</h2>
+        <span class="tag">예약 권장</span>
+    </div>
+    <div class="card-body">
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">Nissin Taxi (닛신)</div>
+                <div class="value"><b>☎ 087-882-2424</b><br>운영 08:30~22:00 · 최대 9명<br>일본어 응대만</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">Okawa Taxi (오카와)</div>
+                <div class="value"><b>☎ 087-851-3356</b><br>운영 08:30~22:00 · 최대 9명<br>일본어 응대만</div>
+            </div>
+        </div>
+
+        <div class="info-box warn">
+            <strong>⚠️ 길거리 잡기 거의 불가능</strong>
+            나오시마는 택시가 매우 적어 <b>전화 예약 필수</b>. 호텔 컨시어지 통해 부탁하는 게 가장 안전.
+            일본어 부담되면 <b>"미야노우라항 → 츠츠지소, 4명, 12:00 (12時, 4人)"</b> 정도 메모 보여주기.
+        </div>
+
+        <div class="info-box danger">
+            <strong>🚖 언제 택시를 써야 하나?</strong>
+            ① 페리 시간 빠듯한데 마치버스 매진 → 츠츠지소에서 미야노우라항 탈출용<br>
+            ② 부모님 컨디션 안 좋을 때 한 구간만<br>
+            ③ 비 폭우 + 짐이 무거울 때
+        </div>
+    </div>
+</div>
+
+<!-- ════════ 시나리오별 동선 ════════ -->
+<div id="scenario" class="card">
+    <div class="card-header h-route">
+        <h2>🌦️ 시나리오별 권장 동선 (4/26 일요일)</h2>
+        <span class="tag">12:45 지추 입장 기준</span>
+    </div>
+    <div class="card-body">
+
+        <!-- 맑음 -->
+        <div class="scenario dry">
+            <h4>☀️ 맑음 — e-bike 베이스</h4>
+            <div class="timeline-flow">
+                <div class="flow-row"><div class="t">09:00</div><div class="arrow">▸</div><div class="desc">미야노우라항 도착 → OUGIYA/TVC e-bike 4대 워크인 <span class="means-tag bike">자전거</span></div></div>
+                <div class="flow-row"><div class="t">09:30</div><div class="arrow">▸</div><div class="desc">혼무라 이동 → 이에 프로젝트 둘러보기 <span class="means-tag bike">자전거</span></div></div>
+                <div class="flow-row"><div class="t">11:30</div><div class="arrow">▸</div><div class="desc">점심 (혼무라 식당) <span class="means-tag walk">도보</span></div></div>
+                <div class="flow-row"><div class="t">12:25</div><div class="arrow">▸</div><div class="desc">자전거를 츠츠지소 자전거 보관소에 두고 셔틀로 환승 <span class="means-tag shuttle">셔틀</span></div></div>
+                <div class="flow-row"><div class="t">12:45</div><div class="arrow">▸</div><div class="desc"><b>지추 미술관 입장 (예약 시간 엄수)</b></div></div>
+                <div class="flow-row"><div class="t">14:30</div><div class="arrow">▸</div><div class="desc">이우환 미술관 → 베네세 하우스 뮤지엄 <span class="means-tag shuttle">셔틀</span></div></div>
+                <div class="flow-row"><div class="t">16:30</div><div class="arrow">▸</div><div class="desc">자전거 회수 → 노란 호박 → 미야노우라항 자전거 반납 <span class="means-tag bike">자전거</span></div></div>
+                <div class="flow-row"><div class="t">17:30</div><div class="arrow">▸</div><div class="desc">페리 탑승 → 다카마쓰항</div></div>
+            </div>
+        </div>
+
+        <!-- 비 -->
+        <div class="scenario rain">
+            <h4>🌧️ 비 — 마치버스 + 셔틀 100%</h4>
+            <div class="timeline-flow">
+                <div class="flow-row"><div class="t">09:00</div><div class="arrow">▸</div><div class="desc">미야노우라항 도착 → 자전거 시도 X, 바로 마치버스 정류장으로 <span class="means-tag bus">버스</span></div></div>
+                <div class="flow-row"><div class="t">09:20</div><div class="arrow">▸</div><div class="desc">마치버스로 혼무라 이동 (¥100) <span class="means-tag bus">버스</span></div></div>
+                <div class="flow-row"><div class="t">09:30</div><div class="arrow">▸</div><div class="desc">혼무라 이에 프로젝트 — 마을길 우산 쓰고 관람 <span class="means-tag walk">도보</span></div></div>
+                <div class="flow-row"><div class="t">11:30</div><div class="arrow">▸</div><div class="desc">점심 (혼무라 실내 식당) <span class="means-tag walk">도보</span></div></div>
+                <div class="flow-row"><div class="t">12:15</div><div class="arrow">▸</div><div class="desc">마치버스로 츠츠지소 이동 (¥100) <span class="means-tag bus">버스</span></div></div>
+                <div class="flow-row"><div class="t">12:30</div><div class="arrow">▸</div><div class="desc">베네세 셔틀 환승 → 지추 미술관 <span class="means-tag shuttle">셔틀</span></div></div>
+                <div class="flow-row"><div class="t">12:45</div><div class="arrow">▸</div><div class="desc"><b>지추 미술관 입장 (예약 시간 엄수)</b></div></div>
+                <div class="flow-row"><div class="t">14:30</div><div class="arrow">▸</div><div class="desc">이우환 → 베네세 하우스 뮤지엄 (실내 위주) <span class="means-tag shuttle">셔틀</span></div></div>
+                <div class="flow-row"><div class="t">16:30</div><div class="arrow">▸</div><div class="desc">셔틀로 츠츠지소 → 마치버스로 미야노우라항 <span class="means-tag bus">버스</span></div></div>
+                <div class="flow-row"><div class="t">17:30</div><div class="arrow">▸</div><div class="desc">페리 탑승. 비 시 노란 호박은 페리에서 멀리서 인증샷</div></div>
+            </div>
+            <div class="info-box danger" style="margin-top:14px;">
+                <strong>⚠️ 비 시 마치버스 16:30~17:30 혼잡 주의</strong>
+                관광객 다 같은 시간에 페리 타러 몰림. <b>16:00 츠츠지소 출발</b>로 30분 더 일찍 움직이는 것 권장. 정 안 되면 택시(087-882-2424).
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ════════ 우천 준비물 ════════ -->
+<div id="pack" class="card">
+    <div class="card-header h-pack">
+        <h2>🧳 우천 시 추가 준비물 (4명)</h2>
+        <span class="tag">DAY 3 백팩에</span>
+    </div>
+    <div class="card-body">
+        <ul style="list-style:none; padding:0;">
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">☂ <b>접이식 우산 4개</b> — 1인 1개 필수. 호텔에서 빌릴 수도 있음</li>
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">🥾 <b>방수/생활방수 신발</b> 또는 발수 스프레이 처리한 운동화 — 미술관 입장 시 신발 벗는 곳도 있음</li>
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">🧥 <b>가벼운 우비/판초</b> — 우산 못 쓸 때 (셔틀 대기, 작품 사이 이동) 백팩에 1장</li>
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">🎒 <b>방수 백팩 커버</b> 또는 큰 비닐봉지 — 카메라·휴대폰 보호</li>
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">🧻 <b>작은 수건</b> — 머리·얼굴·카메라 닦기. 기내 페이스 타월 활용 OK</li>
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">💴 <b>¥100 동전 ¥2,000 분량</b> — 마치버스 왕복 + 환승 대비</li>
+            <li style="padding:10px 0; border-bottom:1px solid var(--border);">🔋 <b>보조배터리</b> — 사진·번역 사용량 ↑, 비 시 배터리 소모 빠름</li>
+            <li style="padding:10px 0;">🗺️ <b>섬 지도 PDF + 셔틀 시각표 PDF 폰에 저장</b> — 섬 와이파이 불안</li>
+        </ul>
+
+        <div class="info-box green" style="margin-top:14px;">
+            <strong>💡 호텔 클레멘트 다카마쓰 출발 전 체크</strong>
+            아침 일기예보 한 번 더 확인 → 비 확정이면 <b>대형 우산 4개를 호텔 프런트에서 빌려가는 것이 가장 편함</b> (보통 무료 대여). 접이식 우산은 백업.
+        </div>
+    </div>
+</div>
+
+<!-- 출처 -->
+<div class="sources">
+    <h3>📚 참고 자료 (공식)</h3>
+    <ul>
+        <li>🔗 <a href="https://naoshima.net/en/access/access_from/" target="_blank">Naoshima Travel Information Site — Getting Around</a> (관광협회 공식)</li>
+        <li>🔗 <a href="https://benesse-artsite.jp/en/access/naoshima/" target="_blank">Benesse Art Site Naoshima — Access</a></li>
+        <li>🔗 <a href="https://benesse-artsite.jp/en/stay/FreeBus_timetable_en.pdf" target="_blank">베네세 무료 셔틀버스 시각표 PDF (영문)</a></li>
+        <li>🔗 <a href="https://naoshima.net/en/access/rental/" target="_blank">자전거·오토바이 대여점 리스트</a></li>
+        <li>🔗 <a href="https://support.benesse-artsite.jp/hc/en-us/articles/42048131477401--Naoshima-Are-there-any-taxis-on-Naoshima" target="_blank">베네세 FAQ — 나오시마 택시 정보</a></li>
+    </ul>
+</div>
+
+<div class="footer">
+    Last updated: 2026-04-23 · D-1 · 4/26(일) 일기예보 변경 시 업데이트 필요
+</div>
+
+</div>
+</body>
+</html>
